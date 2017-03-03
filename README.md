@@ -7,4 +7,5 @@ A learning path creator and tracker.
 - [ ] Let users toggle status to done(green)/doing/stuck(red).
 - [ ] Let users rearrange order or their tutorials.
 - [ ] Let admin see all users current status and done count.
-- [ ] Cover basic security concerns and give the front end some love.
+- [ ] Cover basic security concerns
+- [ ] give the front end some love.
