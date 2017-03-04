@@ -99,7 +99,7 @@ class Profile extends React.Component {
     }
 
     return (
-      <div className=' mw7'>
+      <div className='mw7'>
         <p>hello {this.state.user.nickname}</p>
         <Link to='/edit'><button>Add Tutorial</button></Link>
         <div className='flex flex-wrap justify-center mt4'>
