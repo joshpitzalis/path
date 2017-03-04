@@ -18,11 +18,14 @@ export default class AuthService extends EventEmitter {
 
     // binds login functions to keep this context
     this.login = this.login.bind(this);
+    this.domain = domain;
   }
 
   _doAuthentication (authResult) {
     // Saves the user token
     this.setToken(authResult.idToken);
+     // navigate to the profile route
+    // history.push('/profile');
     // Async loads the user profile data
     this.lock.getProfile(authResult.idToken, (error, profile) => {
       if (error) {
@@ -101,5 +104,21 @@ export default class AuthService extends EventEmitter {
     })
     .then(this._checkStatus) // to raise errors for wrong status
     .then(response => response.json()); // to parse the response as json
+  }
+
+  updateProfile (userId, data) {
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.getToken() // setting authorization header
+    };
+    // making the PATCH http request to auth0 api
+    return fetch(`https://${this.domain}/api/v2/users/${userId}`, {
+      method: 'PATCH',
+      headers: headers,
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(newProfile => this.setProfile(newProfile)); // updating current profile
   }
 }

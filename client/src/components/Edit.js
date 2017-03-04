@@ -11,7 +11,7 @@ class Edit extends React.Component {
     super();
     this.state = {
       edited: false,
-      redirectToReferrer: false,
+      redirect: false,
       desc: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.',
       title: 'Title',
       author: 'Author',
@@ -20,15 +20,15 @@ class Edit extends React.Component {
     };
   }
 
-  componentDidMount () {
-    this.setState({
-      desc: this.props.location.state.desc,
-      title: this.props.location.state.title,
-      author: this.props.location.state.author,
-      link: this.props.location.state.link,
-      edited: this.props.location.state.edited
-    });
-  }
+  // componentDidMount () {
+  //   this.setState({
+  //     desc: this.props.location.state.desc,
+  //     title: this.props.location.state.title,
+  //     author: this.props.location.state.author,
+  //     link: this.props.location.state.link,
+  //     edited: this.props.location.state.edited
+  //   });
+  // }
 
   handleChange = (e) => {
     let target = e.target.name;
@@ -46,24 +46,31 @@ class Edit extends React.Component {
       auth.fetch(`${domain.server}/api/edit?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}&_id=${this.props.location.state._id}`,
         {method: 'PUT'})
         .then(
-          this.setState({ redirectToReferrer: true }))
+          this.setState({ redirect: true }))
         .catch(error => console.log('Request failed', error));
     } else {
       auth.fetch(`${domain.server}/api/add?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}`,
         {method: 'POST'})
         .then(
-          this.setState({ redirectToReferrer: true }))
-        .catch(error => console.log('Request failed', error));
+          response => {
+            const newTutorial = {
+              user_metadata: {
+                [response]: 'todo'
+              }
+            }
+            auth.updateProfile(this.state.id, newTutorial)
+          }
+        )
+        .then(
+          this.setState({ redirect: true }))
+        .catch(error => console.log('Request failed', error))
     }
   }
 
   render () {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    const { redirectToReferrer } = this.state;
-
-    if (redirectToReferrer) {
+    if (this.state.redirect) {
       return (
-        <Redirect to={from} />
+        <Redirect to='/profile' />
       );
     }
 
@@ -81,7 +88,7 @@ class Edit extends React.Component {
           <p className="f6 f5-ns lh-copy measure">
             {this.state.desc}
           </p>
-          <label class="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"/> Mark as Currently Doing</label>
+          <label className="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"/> Mark as Currently Doing</label>
         </div>
       </article>
         </div>
