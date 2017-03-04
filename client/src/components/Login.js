@@ -6,7 +6,9 @@ const auth = new AuthService(process.env.REACT_APP_AUTH0_CLIENT_ID, process.env.
 
 class Login extends React.Component {
   render () {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    console.log(auth.loggedIn())
+
+    const { from } = this.props.location.state || { from: { pathname: '/profile' } };
     if (auth.loggedIn()) {
       return (
         <Redirect to={from} />

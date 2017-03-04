@@ -19,11 +19,10 @@ const AuthExample = () => (
     <div>
       <AuthButton />
       <ul>
-        <li><Link to='/public'>Home</Link></li>
-        <li><Link to='/profile'>My Profile</Link></li>
+        <li><Link to='/'>Home</Link></li>
+        <li><Link to='/profile'>My Path</Link></li>
       </ul>
       <Route exact path='/' component={Home} />
-      <Route path='/public' component={Home} />
       <Route path='/login' component={Login} />
       <PrivateRoute path='/edit' component={Edit} />
       <PrivateRoute path='/profile' component={Profile} />

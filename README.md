@@ -1,7 +1,7 @@
 # path
 A learning path creator and tracker.
 
-- [ ] Create authenticated user profiles
+- [x] Create authenticated user profiles
 - [ ] Let users add tutorials to their profiles. Status set to 'to do' by default
 - [ ] Let users toggle status to done or doing.
 - [ ] Let users toggle status to done(green)/doing/stuck(red).
