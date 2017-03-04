@@ -53,9 +53,10 @@ class Edit extends React.Component {
         {method: 'POST'})
         .then(
           response => {
+            // false means 'todo'/ true means 'doing'
             const newTutorial = {
               user_metadata: {
-                [response]: 'todo'
+                [response]: false
               }
             }
             auth.updateProfile(this.state.id, newTutorial)

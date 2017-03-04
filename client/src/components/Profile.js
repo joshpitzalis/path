@@ -51,9 +51,20 @@ class Profile extends React.Component {
       })
   }
 
-  componentDidMount () {
-    console.log(this.state.user)
-
+  handleStatusChange = (evt, id) => {
+    const changeStatus = {
+      user_metadata: {
+        [id]: evt.target.checked
+      }
+    }
+    auth.updateProfile(this.state.user.user_id, changeStatus)
+    .then(this.setState({isFetching: true}))
+    fetch(domain.server)
+      .then(response => response.json())
+      .then(response => {
+        setTimeout(function() {
+          this.setState({tutorials: response, isFetching: false}); }.bind(this), 1000);
+      })
   }
 
   render () {
@@ -62,6 +73,8 @@ class Profile extends React.Component {
     const tutorials = this.state.tutorials
     .filter(tut => tut.id === this.state.user.user_id)
     .map((tut, index) =>
+    <div>
+      <Tutorial tut={tut} index={index}/>
       <article key={index} className="center mw5 mw6-ns br3 hidden ba b--black-10 mv4">
   <div className='bg-orange br3 br--top'>
     <a href={tut.link} target='_blank' className="dib link">
@@ -73,15 +86,23 @@ class Profile extends React.Component {
       <p className="f6 f5-ns lh-copy measure">
         {tut.desc}
       </p>
-      <p>Status:{this.state.user.user_metadata[`${tut._id}`]}</p>
-      <Link to={{
+      <p>Status:{this.state.user.user_metadata[`${tut._id}`] ? 'Currently Doing' : 'To Do'}</p>
+    <div className='fr'><button onClick={() => this.handleDelete(tut._id)}>Delete</button></div>
+      <div className='fr pr3'><Link to={{
         pathname: '/edit',
         state: tut
-      }}>Edit</Link>
-    <button onClick={() => this.handleDelete(tut._id)}>Delete</button>
-      <label className="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"/> Mark as Currently Doing</label>
+      }}>Edit</Link></div>
+      <label
+        className="pa0 ma0 lh-copy f6 pointer">
+        <input
+        checked={this.state.user.user_metadata[`${tut._id}`]}
+        onChange={(evt) => this.handleStatusChange(evt, tut._id)}
+        type="checkbox"/>
+      Mark as {this.state.user.user_metadata[`${tut._id}`] ? 'To Do' : 'Currently Doing'}
+    </label>
     </div>
-  </article>);
+  </article>
+</div>);
 
     if (this.state.refresh) {
       return (
@@ -107,6 +128,23 @@ class Profile extends React.Component {
         </div>
       </div>
     );
+  }
+}
+
+class Tutorial extends React.Component {
+  constructor (props) {
+    super();
+  }
+  render () {
+    return (
+      <article key={this.props.index} className="center mw5 mw6-ns br3 hidden ba b--black-10 mv4">
+  <div className='bg-orange br3 br--top'>
+    <a href={this.props.tut.link} target='_blank' className="dib link">
+      <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate white">{this.props.tut.title}</h1>
+    </a>
+  </div>
+</article>
+    )
   }
 }
 
