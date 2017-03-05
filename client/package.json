@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-eslint": "^7.1.1",
     "react-scripts": "0.9.3"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   },
   "dependencies": {
     "auth0-lock": "^10.11.0",

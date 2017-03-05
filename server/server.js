@@ -39,13 +39,14 @@ app.post('/api/add', authenticate, function (req, res) {
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   mongo.create({
-    image: req.query.image,
+    desc: req.query.desc,
     title: req.query.title,
     author: req.query.author,
     link: req.query.link,
     id: req.query.id,
     edited: true}, (err, tutorial) => {
     if (err) return console.error(err);
+    res.json(tutorial._id);
   });
 });
 

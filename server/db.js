@@ -11,7 +11,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 const TutorialSchema = new mongoose.Schema({
-  image: String,
+  desc: String,
   title: {
     type: String,
     required: true

@@ -2,6 +2,7 @@ import React from 'react';
 import AuthService from '../utils/AuthService';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import domain from '../utils/domain';
+import Tutorial from './Tutorial';
 
 const auth = new AuthService(process.env.REACT_APP_AUTH0_CLIENT_ID, process.env.REACT_APP_AUTH0_DOMAIN);
 
@@ -10,99 +11,77 @@ class Profile extends React.Component {
     super();
     this.state = {
       tutorials: [],
-      user: auth.getProfile(),
-      refresh: false,
-      isFetching: true
+      user: {},
+      refresh: false
     };
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleStatusChange = this.handleStatusChange.bind(this);
+    this.timeoutPromise = this.timeoutPromise.bind(this);
   }
 
   componentWillMount () {
+    // this populates state with tutorial data from mongo and then user data from auth0
     fetch(domain.server)
       .then(response => response.json())
       .then(response =>
-        this.setState({tutorials: response, isFetching: false})
-      );
+        this.setState({tutorials: response})
+      )
+      .then(
+        this.setState({user: auth.getProfile()})
+      )
+      .catch(error => console.error(error));
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.render();
-    if (nextProps.location.state) {
-      this.setState({refresh: false})
-      // console.log('falsed');
-    }
-  }
-
-  timeoutPromise = (timeout, err, promise) => {
-    return new Promise(function(resolve,reject) {
-        promise.then(resolve,reject);
-        setTimeout(reject.bind(null,err), timeout);
-      });
-    }
-
-  handleDelete = (id) => {
-    auth.fetch(`${domain.server}/api/delete?id=${id}`,
-      {method: 'DELETE'})
-    .then(this.setState({isFetching: true}))
-    fetch(domain.server)
-      .then(response => response.json())
-      .then(response => {
-        setTimeout(function() {
-          this.setState({tutorials: response, isFetching: false}); }.bind(this), 1000);
-      })
-  }
-
-  handleStatusChange = (evt, id) => {
+  componentWillUpdate (nextProps, nextState) {
     const changeStatus = {
-      user_metadata: {
-        [id]: evt.target.checked
-      }
-    }
-    auth.updateProfile(this.state.user.user_id, changeStatus)
-    .then(this.setState({isFetching: true}))
-    fetch(domain.server)
-      .then(response => response.json())
-      .then(response => {
-        setTimeout(function() {
-          this.setState({tutorials: response, isFetching: false}); }.bind(this), 1000);
-      })
+      user_metadata: nextState.user.user_metadata
+    };
+    auth.updateProfile(this.state.user.user_id, changeStatus);
+  }
+
+  // componentWillReceiveProps (nextProps) {
+  //   this.render();
+  //   if (nextProps.location.state) {
+  //     this.setState({refresh: false});
+  //   }
+  // }
+
+  timeoutPromise (timeout, err, promise) {
+    return new Promise(function (resolve, reject) {
+      promise.then(resolve, reject);
+      setTimeout(reject.bind(null, err), timeout);
+    });
+  }
+
+  handleDelete (id) {
+    const tuts = [...this.state.tutorials];
+    const tutorials = tuts.filter(tut => tut._id !== id);
+    this.setState({tutorials});
+  }
+
+  handleStatusChange (evt, id) {
+    const user = {...this.state.user};
+    user.user_metadata[id] = evt.target.checked;
+    this.setState({user});
+
+    // const changeStatus = {
+    //   user_metadata: {
+    //     [id]: evt.target.checked
+    //   }
+    // };
+    //
+    // auth.updateProfile(this.state.user.user_id, changeStatus);
+    // .then(fetch(domain.server)
+    //   .then(response => response.json())
+    //   .then(response => {
+    //     setTimeout(function () {
+    //       this.setState({tutorials: response});
+    //     }.bind(this), 1000);
+    //   }));
   }
 
   render () {
-
-    const { from } = this.props.location.state || { from: { pathname: '/profile' } }
-    const tutorials = this.state.tutorials
-    .filter(tut => tut.id === this.state.user.user_id)
-    .map((tut, index) =>
-    <div>
-      <Tutorial tut={tut} index={index}/>
-      <article key={index} className="center mw5 mw6-ns br3 hidden ba b--black-10 mv4">
-  <div className='bg-orange br3 br--top'>
-    <a href={tut.link} target='_blank' className="dib link">
-      <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate white">{tut.title}</h1>
-    </a>
-  </div>
-    <div className="pa3 bt b--black-10">
-      <h2 className='f5 fw4 gray mt0 truncate bg--orange'>by {tut.author}</h2>
-      <p className="f6 f5-ns lh-copy measure">
-        {tut.desc}
-      </p>
-      <p>Status:{this.state.user.user_metadata[`${tut._id}`] ? 'Currently Doing' : 'To Do'}</p>
-    <div className='fr'><button onClick={() => this.handleDelete(tut._id)}>Delete</button></div>
-      <div className='fr pr3'><Link to={{
-        pathname: '/edit',
-        state: tut
-      }}>Edit</Link></div>
-      <label
-        className="pa0 ma0 lh-copy f6 pointer">
-        <input
-        checked={this.state.user.user_metadata[`${tut._id}`]}
-        onChange={(evt) => this.handleStatusChange(evt, tut._id)}
-        type="checkbox"/>
-      Mark as {this.state.user.user_metadata[`${tut._id}`] ? 'To Do' : 'Currently Doing'}
-    </label>
-    </div>
-  </article>
-</div>);
+    const { from } = this.props.location.state || { from: { pathname: '/profile' } };
 
     if (this.state.refresh) {
       return (
@@ -113,38 +92,26 @@ class Profile extends React.Component {
       );
     }
 
-    if (this.state.isFetching) {
-      return (
-        <h1>Loading...</h1>
-      );
-    }
+    const tutorials = this.state.tutorials
+    .filter(tut => tut.id === this.state.user.user_id)
+    .map((tut, index) =>
+      <Tutorial
+        key={index}
+        tut={tut}
+        user={this.state.user}
+        handleDelete={this.handleDelete}
+        handleStatusChange={this.handleStatusChange} />);
 
     return (
-      <div className='mw7'>
-        <p>hello {this.state.user.nickname}</p>
-        <Link to='/edit'><button>Add Tutorial</button></Link>
-        <div className='flex flex-wrap justify-center mt4'>
+      <div>
+        <div className='tc'>
+          <Link to='/edit' className='f6 link dim br-pill ba ph3 pv2 mb2 dib bg-cucumber white ma5 center'>Add A Tutorial</Link>
+        </div>
+        <div className='flex flex-wrap justify-center mt4 mw7 center'>
           {tutorials}
         </div>
       </div>
     );
-  }
-}
-
-class Tutorial extends React.Component {
-  constructor (props) {
-    super();
-  }
-  render () {
-    return (
-      <article key={this.props.index} className="center mw5 mw6-ns br3 hidden ba b--black-10 mv4">
-  <div className='bg-orange br3 br--top'>
-    <a href={this.props.tut.link} target='_blank' className="dib link">
-      <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate white">{this.props.tut.title}</h1>
-    </a>
-  </div>
-</article>
-    )
   }
 }
 
