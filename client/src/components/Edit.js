@@ -2,7 +2,7 @@ import React from 'react';
 import AuthService from '../utils/AuthService';
 import {Redirect} from 'react-router-dom';
 import domain from '../utils/domain';
-import '../../public/toggle.css'
+import '../../public/toggle.css';
 
 const auth = new AuthService(process.env.REACT_APP_AUTH0_CLIENT_ID, process.env.REACT_APP_AUTH0_DOMAIN);
 
@@ -18,6 +18,8 @@ class Edit extends React.Component {
       link: '',
       id: auth.getProfile().user_id
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   // componentDidMount () {
@@ -30,40 +32,39 @@ class Edit extends React.Component {
   //   });
   // }
 
-  handleChange = (e) => {
+  handleChange (e) {
     let target = e.target.name;
     let value = e.target.value;
     let obj = {};
-    obj[target] = value
-    this.setState(obj)
+    obj[target] = value;
+    this.setState(obj);
   }
 
-  handleSubmit = (e) => {
+  handleSubmit (e) {
     e.preventDefault();
-    const {desc, title, author, link, id} = this.state
+    const {desc, title, author, link, id} = this.state;
     if (this.state.edited) {
       console.log(this.props.location.state._id);
       auth.fetch(`${domain.server}/api/edit?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}&_id=${this.props.location.state._id}`,
         {method: 'PUT'})
-        .then(
-          this.setState({ redirect: true }))
+        .then(this.setState({redirect: true}))
         .catch(error => console.log('Request failed', error));
     } else {
       auth.fetch(`${domain.server}/api/add?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}`,
         {method: 'POST'})
         .then(
           response => {
+            // false means 'todo'/ true means 'doing'
             const newTutorial = {
               user_metadata: {
-                [response]: 'todo'
+                [response]: false
               }
-            }
-            auth.updateProfile(this.state.id, newTutorial)
+            };
+            auth.updateProfile(this.state.id, newTutorial);
           }
         )
-        .then(
-          this.setState({ redirect: true }))
-        .catch(error => console.log('Request failed', error))
+        .then(this.setState({redirect: true}))
+        .catch(error => console.log('Request failed', error));
     }
   }
 
@@ -76,32 +77,32 @@ class Edit extends React.Component {
 
     return (
       <div className='flex flex-wrap justify-center '>
-      <div>
-        <article className="center mw5 mw6-ns br3 hidden ba b--black-10 mv4">
-      <div className='bg-orange br3 br--top'>
-        <a href={this.state.link} target='_blank' className="dib link">
-          <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate white">{this.state.title}</h1>
-        </a>
-      </div>
-        <div className="pa3 bt b--black-10">
-          <h2 className='f5 fw4 gray mt0 truncate bg--orange'>by {this.state.author}</h2>
-          <p className="f6 f5-ns lh-copy measure">
-            {this.state.desc}
-          </p>
-          <label className="pa0 ma0 lh-copy f6 pointer"><input type="checkbox"/> Mark as Currently Doing</label>
-        </div>
-      </article>
+        <div>
+          <article className='center mw5 mw6-ns br3 hidden ba b--black-10 mv4'>
+            <div className='bg-orange br3 br--top'>
+              <a href={this.state.link} target='_blank' className='dib link'>
+                <h1 className='f4 br3 br--top black-60 mv0 pv2 ph3 truncate white'>{this.state.title}</h1>
+              </a>
+            </div>
+            <div className='pa3 bt b--black-10'>
+              <h2 className='f5 fw4 gray mt0 truncate bg--orange'>by {this.state.author}</h2>
+              <p className='f6 f5-ns lh-copy measure'>
+                {this.state.desc}
+              </p>
+              <label className='pa0 ma0 lh-copy f6 pointer'><input type='checkbox' /> Mark as Currently Doing</label>
+            </div>
+          </article>
         </div>
         <form
           onSubmit={this.handleSubmit}
           className='mh4 mv4  ba b--black-10 ph4 br3'>
           <div className='mt4'>
-            <p><input className="pa2 input-reset ba bg-transparent w-100 measure" type='text' name='desc' onChange={this.handleChange} value={this.state.desc} /></p>
-            <p><input className="pa2 input-reset ba bg-transparent w-100 measure" type='text' name='title' onChange={this.handleChange} value={this.state.title} /></p>
-            <p><input className="pa2 input-reset ba bg-transparent w-100 measure" type='text' name='author' onChange={this.handleChange} value={this.state.author} /></p>
-            <p><input className="pa2 input-reset ba bg-transparent w-100 measure" type='url' name='link' placeholder='Add URL link here' onChange={this.handleChange} value={this.state.link} /></p>
+            <p><input className='pa2 input-reset ba bg-transparent w-100 measure' type='text' name='desc' onChange={this.handleChange} value={this.state.desc} /></p>
+            <p><input className='pa2 input-reset ba bg-transparent w-100 measure' type='text' name='title' onChange={this.handleChange} value={this.state.title} /></p>
+            <p><input className='pa2 input-reset ba bg-transparent w-100 measure' type='text' name='author' onChange={this.handleChange} value={this.state.author} /></p>
+            <p><input className='pa2 input-reset ba bg-transparent w-100 measure' type='url' name='link' placeholder='Add URL link here' onChange={this.handleChange} value={this.state.link} /></p>
           </div>
-          <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 mb3" type='submit' value='Submit' />
+          <input className='b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 mb3' type='submit' value='Submit' />
         </form>
       </div>
     );
@@ -159,6 +160,5 @@ class Edit extends React.Component {
 //     </div>
 //   </article>
 // )
-
 
 export default Edit;
