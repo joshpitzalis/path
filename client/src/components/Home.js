@@ -19,14 +19,6 @@ class Home extends React.Component {
   }
 
   render () {
-    // const tutorials = this.state.tutorials.map((tut, index) =>
-    //   <article key={index} classNameName='w5 bg-white br3 pa3 pa4-ns ma1 ba b--black-10'>
-    //     <div classNameName='tc'>
-    //       <img src={tut.image} classNameName='h4 w4 dib ba b--black-05 pa2' title={tut.title} alt={tut.title} />
-    //       <a href={tut.link} target='_blank'><h1 classNameName='f3 mb2 truncate'>{tut.title}</h1></a>
-    //       <h2 classNameName='f5 fw4 gray mt0 truncate'>{tut.author}</h2>
-    //     </div>
-    //   </article>);
     return (
       <header className='sans-serif'>
         <div className='cover bg-left bg-center-l hero'>

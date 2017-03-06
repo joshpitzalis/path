@@ -44,6 +44,7 @@ app.post('/api/add', authenticate, function (req, res) {
     author: req.query.author,
     link: req.query.link,
     id: req.query.id,
+    nickname: req.query.nickname,
     edited: true}, (err, tutorial) => {
     if (err) return console.error(err);
     res.json(tutorial._id);
@@ -66,6 +67,17 @@ app.put('/api/edit', authenticate, function (req, res) {
     });
 });
 
+app.patch('/api/status', authenticate, function (req, res) {
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  mongo.findOneAndUpdate({_id: req.query.id},
+    {doing: req.body},
+    (err, tutorial) => {
+      if (err) return console.error(err);
+    });
+});
+
 app.delete('/api/delete', authenticate, function (req, res) {
   res.header('Access-Control-Allow-Origin', origin);
   res.header('Access-Control-Allow-Credentials', true);
@@ -74,5 +86,4 @@ app.delete('/api/delete', authenticate, function (req, res) {
   mongo.find({_id: req.query.id}).remove().exec();
 });
 
-// listen for requests :)
 app.listen(3001);

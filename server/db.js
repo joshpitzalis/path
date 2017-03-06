@@ -28,6 +28,14 @@ const TutorialSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  nickname: {
+    type: String,
+    required: true
+  },
+  doing: {
+    type: Boolean,
+    required: false
+  },
   edited: {
     type: Boolean,
     required: true

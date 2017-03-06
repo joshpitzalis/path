@@ -16,7 +16,8 @@ class Edit extends React.Component {
       title: 'Title',
       author: 'Author',
       link: '',
-      id: auth.getProfile().user_id
+      id: auth.getProfile().user_id,
+      nickname: auth.getProfile().nickname
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -42,15 +43,14 @@ class Edit extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault();
-    const {desc, title, author, link, id} = this.state;
+    const {desc, title, author, link, id, nickname} = this.state;
     if (this.state.edited) {
-      console.log(this.props.location.state._id);
-      auth.fetch(`${domain.server}/api/edit?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}&_id=${this.props.location.state._id}`,
+      auth.fetch(`${domain.server}/api/edit?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}&_id=${this.props.location.state._id}&nickname=${nickname}`,
         {method: 'PUT'})
         .then(this.setState({redirect: true}))
         .catch(error => console.log('Request failed', error));
     } else {
-      auth.fetch(`${domain.server}/api/add?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}`,
+      auth.fetch(`${domain.server}/api/add?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}&nickname=${nickname}`,
         {method: 'POST'})
         .then(
           response => {

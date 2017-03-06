@@ -30,8 +30,8 @@ const AuthExample = () => (
           </svg>
         </Link>
         <div className='flex-grow pa3 flex items-center '>
+          <Link to='/profile' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Learning Path</Link>
           <Link to='/group' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Group</Link>
-          <Link to='/profile' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Path</Link>
           <AuthButton />
         </div>
       </nav>

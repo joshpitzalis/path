@@ -58,6 +58,9 @@ class Profile extends React.Component {
     const user = {...this.state.user};
     user.user_metadata[id] = evt.target.checked;
     this.setState({user});
+    // update a given tutorial with username and status
+    auth.fetch(`${domain.server}/api/status?id=${id}&doing=${evt.target.checked}`, {method: 'PATCH'})
+      .catch(error => console.log('Request failed', error));
   }
 
   render () {

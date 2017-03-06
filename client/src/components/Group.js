@@ -19,17 +19,30 @@ class Group extends React.Component {
   }
 
   render () {
-    // const tutorials = this.state.tutorials.map((tut, index) =>
-    //   <article key={index} className='w5 bg-white br3 pa3 pa4-ns ma1 ba b--black-10'>
-    //     <div className='tc'>
-    //       <img src={tut.image} className='h4 w4 dib ba b--black-05 pa2' title={tut.title} alt={tut.title} />
-    //       <a href={tut.link} target='_blank'><h1 className='f3 mb2 truncate'>{tut.title}</h1></a>
-    //       <h2 className='f5 fw4 gray mt0 truncate'>{tut.author}</h2>
-    //     </div>
-    //   </article>);
+    const tuts = this.state.tutorials
+    .filter(tut => tut.doing)
+    .map((tut, index) =>
+      <article key={index} className='center w5 br3 hidden ba b--black-10 mv4'>
+        <div className='br3 br--top bg-white'>
+          <a href={tut.link} target='_blank' className='dib link'>
+            <h1 className='f4 br3 br--top black-60 mv0 pv2 ph3 truncate'>{tut.nickname}</h1>
+          </a>
+        </div>
+
+        <div className='pa3 bt b--black-10'>
+          <h2 className='f5 fw4 gray mt0 truncate bg--orange'> {tut.title}</h2>
+          // <p className='f6 f5-ns lh-copy measure'>
+          //                                                                                                                           {tut.title}
+          // </p>
+        </div>
+      </article>);
+
     return (
-      <div className='flex flex-wrap justify-center'>
-        <h1>All Jaaga Students current projects</h1>
+      <div>
+        <h1 className='tc'>All Jaaga Students Current Projects</h1>
+        <div className='flex flex-wrap justify-center'>
+          {tuts}
+        </div>
       </div>
     );
   }
