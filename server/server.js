@@ -59,9 +59,9 @@ app.put('/api/edit', authenticate, function (req, res) {
       image: req.query.image,
       title: req.query.title,
       author: req.query.author,
-      link: req.query.link,
-      id: req.query.id},
+      link: req.query.link},
     (err, tutorial) => {
+      console.log(tutorial);
       if (err) return console.error(err);
     });
 });
