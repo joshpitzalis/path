@@ -5,7 +5,10 @@ class Tutorial extends React.Component {
   constructor (props) {
     super();
   }
+
   render () {
+    const tut = this.props;
+
     return (
       <article key={this.props.index} className='center mw5 mw6-ns br3 hidden ba b--black-10 mv4'>
         <div className='br3 br--top bg-white'>
@@ -27,7 +30,10 @@ class Tutorial extends React.Component {
           <p>Status:{this.props.user.user_metadata[`${this.props.tut._id}`] ? 'Currently Doing' : 'To Do'}</p>
           <div className='fr'><button onClick={() => this.props.handleDelete(this.props.tut._id)}>Delete</button></div>
 
-          <div className='fr pr3'><Link to='/edit'>Edit</Link></div>
+          <div className='fr pr3'><Link to={{
+            pathname: '/edit',
+            state: JSON.stringify(tut)
+          }}>Edit</Link></div>
           <label
             className='pa0 ma0 lh-copy f6 pointer'>
             <input

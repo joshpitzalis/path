@@ -22,15 +22,20 @@ class Edit extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  // componentDidMount () {
-  //   this.setState({
-  //     desc: this.props.location.state.desc,
-  //     title: this.props.location.state.title,
-  //     author: this.props.location.state.author,
-  //     link: this.props.location.state.link,
-  //     edited: this.props.location.state.edited
-  //   });
-  // }
+  componentDidMount () {
+    if (this.props.location.state) {
+      console.log(JSON.parse(this.props.location.state));
+      const result = JSON.parse(this.props.location.state);
+      this.setState({
+        desc: result.tut.desc,
+        title: result.tut.title,
+        author: result.tut.author,
+        link: result.tut.link,
+        edited: result.tut.edited,
+        id: result.tut._id
+      });
+    }
+  }
 
   handleChange (e) {
     let target = e.target.name;
@@ -43,9 +48,9 @@ class Edit extends React.Component {
   handleSubmit (e) {
     e.preventDefault();
     const {desc, title, author, link, id} = this.state;
+    console.log(id);
     if (this.state.edited) {
-      console.log(this.props.location.state._id);
-      auth.fetch(`${domain.server}/api/edit?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}&_id=${this.props.location.state._id}`,
+      auth.fetch(`${domain.server}/api/edit?desc=${desc}&title=${title}&author=${author}&link=${link}&id=${id}&_id=${id}`,
         {method: 'PUT'})
         .then(this.setState({redirect: true}))
         .catch(error => console.log('Request failed', error));
