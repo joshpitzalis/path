@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import Login from './components/Login';
 import Home from './components/Home';
+import Group from './components/Group';
 import Profile from './components/Profile';
 import Edit from './components/Edit';
 import AuthService from './utils/AuthService';
@@ -29,13 +30,14 @@ const AuthExample = () => (
           </svg>
         </Link>
         <div className='flex-grow pa3 flex items-center '>
-          <Link to='/' className='f6 link dib dark-gray dim mr3 mr4-ns'>Home</Link>
+          <Link to='/group' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Group</Link>
           <Link to='/profile' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Path</Link>
           <AuthButton />
         </div>
       </nav>
 
       <Route exact path='/' component={Home} />
+      <Route path='/group' component={Group} />
       <Route path='/login' component={Login} />
       <PrivateRoute path='/edit' component={Edit} />
       <PrivateRoute path='/profile' component={Profile} />

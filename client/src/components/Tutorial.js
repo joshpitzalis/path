@@ -8,10 +8,15 @@ class Tutorial extends React.Component {
   render () {
     return (
       <article key={this.props.index} className='center mw5 mw6-ns br3 hidden ba b--black-10 mv4'>
-        <div className='bg-cucumber br3 br--top'>
+        <div className='br3 br--top bg-white'>
           <a href={this.props.tut.link} target='_blank' className='dib link'>
-            <h1 className='f4 br3 br--top black-60 mv0 pv2 ph3 truncate white'>{this.props.tut.title}</h1>
+            <h1 className='f4 br3 br--top black-60 mv0 pv2 ph3 truncate'>{this.props.tut.title}</h1>
           </a>
+          {this.props.user.user_metadata[this.props.tut._id] && <label className='switch dib fr ma1'>
+            <input type='checkbox' />
+            <div className='slider round' />
+          </label>
+        }
         </div>
 
         <div className='pa3 bt b--black-10'>
@@ -28,7 +33,8 @@ class Tutorial extends React.Component {
             <input
               checked={this.props.user.user_metadata[`${this.props.tut._id}`]}
               onChange={(evt) => this.props.handleStatusChange(evt, this.props.tut._id)}
-              type='checkbox' />
+              type='checkbox'
+              className='mr2' />
             Mark as {this.props.user.user_metadata[`${this.props.tut._id}`] ? 'To Do' : 'Currently Doing'}
           </label>
         </div>

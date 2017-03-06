@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthService from '../utils/AuthService';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import domain from '../utils/domain';
 import Tutorial from './Tutorial';
 
@@ -11,12 +11,10 @@ class Profile extends React.Component {
     super();
     this.state = {
       tutorials: [],
-      user: {},
-      refresh: false
+      user: {}
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.handleStatusChange = this.handleStatusChange.bind(this);
-    this.timeoutPromise = this.timeoutPromise.bind(this);
   }
 
   componentWillMount () {
@@ -36,62 +34,33 @@ class Profile extends React.Component {
     const changeStatus = {
       user_metadata: nextState.user.user_metadata
     };
-    auth.updateProfile(this.state.user.user_id, changeStatus);
+    auth.updateProfile(this.state.user.user_id, changeStatus)
+    .catch(error => console.error(error));
   }
 
-  // componentWillReceiveProps (nextProps) {
-  //   this.render();
-  //   if (nextProps.location.state) {
-  //     this.setState({refresh: false});
-  //   }
+  // timeoutPromise (timeout, err, promise) {
+  //   return new Promise(function (resolve, reject) {
+  //     promise.then(resolve, reject);
+  //     setTimeout(reject.bind(null, err), timeout);
+  //   });
   // }
-
-  timeoutPromise (timeout, err, promise) {
-    return new Promise(function (resolve, reject) {
-      promise.then(resolve, reject);
-      setTimeout(reject.bind(null, err), timeout);
-    });
-  }
 
   handleDelete (id) {
     const tuts = [...this.state.tutorials];
     const tutorials = tuts.filter(tut => tut._id !== id);
     this.setState({tutorials});
+    auth.fetch(`${domain.server}/api/delete?id=${id}`,
+      {method: 'DELETE'})
+      .catch(error => console.error(error));
   }
 
   handleStatusChange (evt, id) {
     const user = {...this.state.user};
     user.user_metadata[id] = evt.target.checked;
     this.setState({user});
-
-    // const changeStatus = {
-    //   user_metadata: {
-    //     [id]: evt.target.checked
-    //   }
-    // };
-    //
-    // auth.updateProfile(this.state.user.user_id, changeStatus);
-    // .then(fetch(domain.server)
-    //   .then(response => response.json())
-    //   .then(response => {
-    //     setTimeout(function () {
-    //       this.setState({tutorials: response});
-    //     }.bind(this), 1000);
-    //   }));
   }
 
   render () {
-    const { from } = this.props.location.state || { from: { pathname: '/profile' } };
-
-    if (this.state.refresh) {
-      return (
-        <Redirect to={{
-          pathname: '/profile',
-          state: { referrer: from }
-        }} />
-      );
-    }
-
     const tutorials = this.state.tutorials
     .filter(tut => tut.id === this.state.user.user_id)
     .map((tut, index) =>
