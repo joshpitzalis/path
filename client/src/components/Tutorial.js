@@ -13,7 +13,8 @@ class Tutorial extends React.Component {
             <h1 className='f4 br3 br--top black-60 mv0 pv2 ph3 truncate'>{this.props.tut.title}</h1>
           </a>
           {this.props.user.user_metadata[this.props.tut._id] && <label className='switch dib fr ma1'>
-            <input type='checkbox' />
+            <input type='checkbox' onChange={(evt) => this.props.handleHelp(evt, this.props.tut._id)}
+              checked={this.props.tut.stuck} />
             <div className='slider round' />
           </label>
         }

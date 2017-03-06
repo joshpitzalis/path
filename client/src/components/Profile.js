@@ -15,6 +15,7 @@ class Profile extends React.Component {
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.handleStatusChange = this.handleStatusChange.bind(this);
+    this.handleHelp = this.handleHelp.bind(this);
   }
 
   componentWillMount () {
@@ -63,6 +64,15 @@ class Profile extends React.Component {
       .catch(error => console.log('Request failed', error));
   }
 
+  handleHelp (evt, id) {
+    const tutorials = [...this.state.tutorials];
+    const tut = tutorials.find(tut => tut._id === id);
+    tut.stuck = evt.target.checked;
+    this.setState({tutorials});
+    auth.fetch(`${domain.server}/api/stuck?id=${id}&stuck=${evt.target.checked}`, {method: 'PATCH'})
+      .catch(error => console.log('Request failed', error));
+  }
+
   render () {
     const tutorials = this.state.tutorials
     .filter(tut => tut.id === this.state.user.user_id)
@@ -72,7 +82,8 @@ class Profile extends React.Component {
         tut={tut}
         user={this.state.user}
         handleDelete={this.handleDelete}
-        handleStatusChange={this.handleStatusChange} />);
+        handleStatusChange={this.handleStatusChange}
+        handleHelp={this.handleHelp} />);
 
     return (
       <div>

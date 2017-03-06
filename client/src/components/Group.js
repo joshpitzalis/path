@@ -23,7 +23,7 @@ class Group extends React.Component {
     .filter(tut => tut.doing)
     .map((tut, index) =>
       <article key={index} className='center w5 br3 hidden ba b--black-10 mv4'>
-        <div className='br3 br--top bg-white'>
+        <div className={`br3 br--top ${tut.stuck ? 'bg-red' : 'bg-white'}`}>
           <a href={tut.link} target='_blank' className='dib link'>
             <h1 className='f4 br3 br--top black-60 mv0 pv2 ph3 truncate'>{tut.nickname}</h1>
           </a>
@@ -31,9 +31,6 @@ class Group extends React.Component {
 
         <div className='pa3 bt b--black-10'>
           <h2 className='f5 fw4 gray mt0 truncate bg--orange'> {tut.title}</h2>
-          // <p className='f6 f5-ns lh-copy measure'>
-          //                                                                                                                           {tut.title}
-          // </p>
         </div>
       </article>);
 

@@ -45,7 +45,8 @@ app.post('/api/add', authenticate, function (req, res) {
     link: req.query.link,
     id: req.query.id,
     nickname: req.query.nickname,
-    edited: true}, (err, tutorial) => {
+    edited: true,
+    stuck: false}, (err, tutorial) => {
     if (err) return console.error(err);
     res.json(tutorial._id);
   });
@@ -73,6 +74,17 @@ app.patch('/api/status', authenticate, function (req, res) {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   mongo.findOneAndUpdate({_id: req.query.id},
     {doing: req.body},
+    (err, tutorial) => {
+      if (err) return console.error(err);
+    });
+});
+
+app.patch('/api/stuck', authenticate, function (req, res) {
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  mongo.findOneAndUpdate({_id: req.query.id},
+    {stuck: req.query.stuck},
     (err, tutorial) => {
       if (err) return console.error(err);
     });

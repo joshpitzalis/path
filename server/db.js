@@ -36,6 +36,10 @@ const TutorialSchema = new mongoose.Schema({
     type: Boolean,
     required: false
   },
+  stuck: {
+    type: Boolean,
+    required: false
+  },
   edited: {
     type: Boolean,
     required: true
