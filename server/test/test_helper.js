@@ -7,7 +7,3 @@ mongoose.connection
   .on('error', (error) => {
     console.warn('Warning', error);
   });
-
-// beforEach(() => {
-//   mongoose.connection.collection.
-// })
