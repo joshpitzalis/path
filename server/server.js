@@ -10,7 +10,7 @@ if (!process.env.AUTH0_CLIENT_ID || !process.env.AUTH0_SECRET) {
   throw 'Make sure you have AUTH0_CLIENT_ID and AUTH0_SECRET in your .env file';
 }
 
-// const origin = 'http://mern.surge.sh';
+// const origin = 'http://path.surge.sh';
 // const origin = 'http://smart-rest.surge.sh';
 const origin = 'http://localhost:3000';
 
@@ -44,7 +44,9 @@ app.post('/api/add', authenticate, function (req, res) {
     author: req.query.author,
     link: req.query.link,
     id: req.query.id,
-    edited: true}, (err, tutorial) => {
+    nickname: req.query.nickname,
+    edited: true,
+    stuck: false}, (err, tutorial) => {
     if (err) return console.error(err);
     res.json(tutorial._id);
   });
@@ -56,12 +58,33 @@ app.put('/api/edit', authenticate, function (req, res) {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   mongo.findOneAndUpdate({_id: req.query._id},
     {
-      image: req.query.image,
+      desc: req.query.desc,
       title: req.query.title,
       author: req.query.author,
       link: req.query.link},
     (err, tutorial) => {
-      console.log(tutorial);
+      if (err) return console.error(err);
+    });
+});
+
+app.patch('/api/status', authenticate, function (req, res) {
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  mongo.findOneAndUpdate({_id: req.query.id},
+    {doing: req.body},
+    (err, tutorial) => {
+      if (err) return console.error(err);
+    });
+});
+
+app.patch('/api/stuck', authenticate, function (req, res) {
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  mongo.findOneAndUpdate({_id: req.query.id},
+    {stuck: req.query.stuck},
+    (err, tutorial) => {
       if (err) return console.error(err);
     });
 });
@@ -70,9 +93,7 @@ app.delete('/api/delete', authenticate, function (req, res) {
   res.header('Access-Control-Allow-Origin', origin);
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  console.log(req.query.id);
   mongo.find({_id: req.query.id}).remove().exec();
 });
 
-// listen for requests :)
 app.listen(3001);

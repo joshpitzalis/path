@@ -30,19 +30,18 @@ const AuthExample = () => (
           </svg>
         </Link>
         <div className='flex-grow pa3 flex items-center '>
-          <Link to='/group' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Group</Link>
-          <Link to='/profile' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Path</Link>
+          <Link to='/profile' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Learning Path</Link>
           <AuthButton />
         </div>
       </nav>
 
       <Route exact path='/' component={Home} />
-      <Route path='/group' component={Group} />
+      <PrivateRoute path='/group' component={Group} />
       <Route path='/login' component={Login} />
       <PrivateRoute path='/edit' component={Edit} />
       <PrivateRoute path='/profile' component={Profile} />
 
-      <footer className='mt7 bg-near-black white-80 pv5 pv6-l ph4'>
+      <footer className='bg-near-black white-80 pv5 pv6-l ph4'>
         <p className='f6'><span className='dib mr4 mr5-ns'>©2017 Jaaga, Inc.</span>
           <a className=' link white-80 hover-light-purple' href='/terms'>Contact</a> /
         <a className='link white-80 hover-gold' href='/privacy'> About </a> /

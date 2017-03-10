@@ -1,5 +1,5 @@
 const domain = {
-  // server: 'https://dull-appliance.gomix.me'
+  // server: 'https://server-uiipsrzhkc.now.sh'
   server: 'http://localhost:3001'
 };
 

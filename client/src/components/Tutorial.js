@@ -10,13 +10,14 @@ class Tutorial extends React.Component {
     const tut = this.props;
 
     return (
-      <article key={this.props.index} className='center mw5 mw6-ns br3 hidden ba b--black-10 mv4'>
-        <div className='br3 br--top bg-white'>
+      <article key={this.props.index} className='center w-70 br3 ba b--black-10 mv4'>
+        <div className='br3 br--top bg-white w-100'>
           <a href={this.props.tut.link} target='_blank' className='dib link'>
             <h1 className='f4 br3 br--top black-60 mv0 pv2 ph3 truncate'>{this.props.tut.title}</h1>
           </a>
           {this.props.user.user_metadata[this.props.tut._id] && <label className='switch dib fr ma1'>
-            <input type='checkbox' />
+            <input type='checkbox' onChange={(evt) => this.props.handleHelp(evt, this.props.tut._id)}
+              checked={this.props.tut.stuck} />
             <div className='slider round' />
           </label>
         }

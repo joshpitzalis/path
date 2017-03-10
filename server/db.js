@@ -5,7 +5,9 @@ mongoose.connect(process.env.DBURI);
   // plug in the promise library:
 mongoose.Promise = global.Promise;
 
-mongoose.connection.on('error', (err) => {
+mongoose.connection
+.once('open', () => console.log('Mongo good to go!'))
+.on('error', (err) => {
   console.error(`Mongoose connection error: ${err}`);
   process.exit(1);
 });
@@ -28,10 +30,23 @@ const TutorialSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  nickname: {
+    type: String,
+    required: true
+  },
+  doing: {
+    type: Boolean,
+    required: false
+  },
+  stuck: {
+    type: Boolean,
+    required: false
+  },
   edited: {
     type: Boolean,
     required: true
   }
 });
 
+// this represents teh entire collection
 module.exports = mongoose.model('Tutorial', TutorialSchema);
