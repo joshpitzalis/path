@@ -14,9 +14,9 @@ class Login extends React.Component {
     }
 
     return (
-      <div className='tc'>
-        <p>You must log in to view the page at {from.pathname}</p>
-        <button onClick={auth.login.bind(this)}>Log in</button>
+      <div className='mv6 tc'>
+        <p>You must Signup or Log in to view this page.</p>
+        <button className='f6 dib bg-black white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--black-20' onClick={auth.login.bind(this)}>Sign Up</button>
       </div>
     );
   }
