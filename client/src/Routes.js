@@ -12,21 +12,25 @@ import Nav from './components/Nav.js'
 import Home from './components/Home'
 // import Group from './components/Group'
 import Profile from './components/Profile'
-// import Edit from './components/Edit'
+import Edit from './components/Edit'
+import Add from './components/Add'
 import { auth } from './firebase.js'
 
 export default class App extends Component {
   state = {
     authed: false,
-    loading: true
+    loading: true,
+    uid: null
   }
 
   componentDidMount() {
     this.removeListener = auth.onAuthStateChanged(user => {
+      console.log()
       if (user) {
         this.setState({
           authed: true,
-          loading: false
+          loading: false,
+          uid: user.uid
         })
       } else {
         this.setState({
@@ -42,6 +46,9 @@ export default class App extends Component {
   }
 
   render() {
+    if (this.state.redirectTo) {
+      return <Redirect to={'/profile'} />
+    }
     return this.state.loading === true
       ? <h1 className="tc pt5">Loading...</h1>
       : <BrowserRouter>
@@ -58,6 +65,18 @@ export default class App extends Component {
                 authed={this.state.authed}
                 path="/profile"
                 component={Profile}
+                uid={this.state.uid}
+              />
+              <PrivateRoute
+                authed={this.state.authed}
+                path="/edit/:tutId"
+                component={Edit}
+              />
+              <PrivateRoute
+                authed={this.state.authed}
+                path="/add"
+                component={Add}
+                uid={this.state.uid}
               />
               <Route render={() => <h3>No Match</h3>} />
             </Switch>

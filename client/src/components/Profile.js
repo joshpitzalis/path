@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Tutorial from './Tutorial'
-
+import { database } from '../firebase.js'
 export default class Profile extends Component {
   state = {
-    tutorials: [],
-    user: {}
+    tutorials: []
   }
 
-  componentWillMount() {
-    // this populates state with tutorial data from mongo and then user data from auth0
+  componentDidMount() {
+    // this populates state with tutorial data from firebase
+    database
+      .ref(`/tutorials`)
+      .once('value')
+      .then(snap => this.setState({ tutorials: snap.val() }))
     // fetch(domain.server)
     //   .then(response => response.json())
     //   .then(response => this.setState({ tutorials: response }))
@@ -68,16 +71,20 @@ export default class Profile extends Component {
   }
 
   render() {
-    const tutorials = this.state.tutorials
-      .filter(tut => tut.id === this.state.user.user_id)
+    const tutorials = Object.keys(this.state.tutorials)
+      .filter(tut => tut.uid !== this.props.uid)
       .map((tut, index) =>
         <Tutorial
           key={index}
-          tut={tut}
-          user={this.state.user}
-          handleDelete={this.handleDelete}
-          handleStatusChange={this.handleStatusChange}
-          handleHelp={this.handleHelp}
+          title={this.state.tutorials[tut].title}
+          description={this.state.tutorials[tut].description}
+          author={this.state.tutorials[tut].author}
+          link={this.state.tutorials[tut].link}
+          tutId={tut}
+          // user={this.state.user}
+          // handleDelete={this.handleDelete}
+          // handleStatusChange={this.handleStatusChange}
+          // handleHelp={this.handleHelp}
         />
       )
 
@@ -85,12 +92,11 @@ export default class Profile extends Component {
       <div>
         <div className="tc">
           <Link
-            to="/edit"
+            to="/add"
             className="f6 link dim br-pill ba ph3 pv2 mb2 dib bg-cucumber white ma5 center">
             Add A Tutorial
           </Link>
         </div>
-        <p>You logged in now</p>
         <div className="flex flex-wrap justify-center mt4 mw7 center">
           {tutorials}
         </div>
