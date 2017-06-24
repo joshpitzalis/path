@@ -10,7 +10,7 @@
     "parser": "babel-eslint"
   },
   "dependencies": {
-    "auth0-lock": "^10.11.0",
+    "firebase": "^4.1.3",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-router-dom": "next",

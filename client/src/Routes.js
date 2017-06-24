@@ -1,80 +1,98 @@
-import React from 'react';
+import React, { Component } from 'react'
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Route,
   Link,
   Redirect,
-  withRouter
-} from 'react-router-dom';
-import Login from './components/Login';
-import Home from './components/Home';
-import Group from './components/Group';
-import Profile from './components/Profile';
-import Edit from './components/Edit';
-import AuthService from './utils/AuthService';
+  withRouter,
+  Switch
+} from 'react-router-dom'
+// import Login from './components/Login'
+import Nav from './components/Nav.js'
+import Home from './components/Home'
+// import Group from './components/Group'
+import Profile from './components/Profile'
+// import Edit from './components/Edit'
+import { auth } from './firebase.js'
 
-const auth = new AuthService(process.env.REACT_APP_AUTH0_CLIENT_ID, process.env.REACT_APP_AUTH0_DOMAIN);
+export default class App extends Component {
+  state = {
+    authed: false,
+    loading: true
+  }
 
-const AuthExample = () => (
-  <Router >
-    <div>
-      <nav className='flex justify-between bb b--black-10'>
-        <Link to='/' className='link white-70 hover-white no-underline flex items-center pa3' href=''>
-          <svg
-            className='dib h1 w1'
-            data-icon='grid'
-            viewBox='0 0 32 32'
-            >
-            <title>Super Normal Icon Mark</title>
-            <path d='M2 2 L10 2 L10 10 L2 10z M12 2 L20 2 L20 10 L12 10z M22 2 L30 2 L30 10 L22 10z M2 12 L10 12 L10 20 L2 20z M12 12 L20 12 L20 20 L12 20z M22 12 L30 12 L30 20 L22 20z M2 22 L10 22 L10 30 L2 30z M12 22 L20 22 L20 30 L12 30z M22 22 L30 22 L30 30 L22 30z' />
-          </svg>
-        </Link>
-        <div className='flex-grow pa3 flex items-center '>
-          <Link to='/profile' className='f6 link dib dark-gray dim mr3 mr4-ns'>My Learning Path</Link>
-          <AuthButton />
-        </div>
-      </nav>
+  componentDidMount() {
+    this.removeListener = auth.onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          authed: true,
+          loading: false
+        })
+      } else {
+        this.setState({
+          authed: false,
+          loading: false
+        })
+      }
+    })
+  }
 
-      <Route exact path='/' component={Home} />
-      <PrivateRoute path='/group' component={Group} />
-      <Route path='/login' component={Login} />
-      <PrivateRoute path='/edit' component={Edit} />
-      <PrivateRoute path='/profile' component={Profile} />
+  componentWillUnmount() {
+    this.removeListener()
+  }
 
-      <footer className='bg-near-black white-80 pv5 pv6-l ph4'>
-        <p className='f6'><span className='dib mr4 mr5-ns'>©2017 Jaaga, Inc.</span>
-          <a className=' link white-80 hover-light-purple' href='/terms'>Contact</a> /
-        <a className='link white-80 hover-gold' href='/privacy'> About </a> /
-        <a className='link white-80 hover-green' href='#'>Report A Bug</a>
-        </p>
-      </footer>
-    </div>
-  </Router>
-);
+  render() {
+    return this.state.loading === true
+      ? <h1 className="tc pt5">Loading...</h1>
+      : <BrowserRouter>
+          <div>
+            <PropsRoute path="/" component={Nav} authed={this.state.authed} />
+            <Switch>
+              <PropsRoute
+                path="/"
+                exact
+                component={Home}
+                authed={this.state.authed}
+              />
+              <PrivateRoute
+                authed={this.state.authed}
+                path="/profile"
+                component={Profile}
+              />
+              <Route render={() => <h3>No Match</h3>} />
+            </Switch>
+          </div>
+        </BrowserRouter>
+  }
+}
 
-const AuthButton = withRouter(({ push }) => (
-  auth.loggedIn() ? (
-    <p>
-      <button className='f6 dib bg-black white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--black-20' onClick={() => {
-        auth.logout(() => push('/'));
-      }}>Sign out</button>
-    </p>
-  ) : (
-    <p><button className='f6 dib bg-black white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--black-20' onClick={auth.login.bind(this)}>Log in</button></p>
+// These hoc components allow you to pass props into a route component
+const renderMergedProps = (component, ...rest) => {
+  const finalProps = Object.assign({}, ...rest)
+  return React.createElement(component, finalProps)
+}
+
+const PropsRoute = ({ component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={routeProps => {
+        return renderMergedProps(component, routeProps, rest)
+      }}
+    />
   )
-));
+}
 
-const PrivateRoute = ({ component, ...rest }) => (
-  <Route {...rest} render={props => (
-    auth.loggedIn() ? (
-      React.createElement(component, props)
-    ) : (
-      <Redirect to={{
-        pathname: '/login',
-        state: { from: props.location }
-      }} />
-    )
-  )} />
-);
-
-export default AuthExample;
+const PrivateRoute = ({ component, authed, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={routeProps =>
+        authed === true
+          ? renderMergedProps(component, routeProps, rest)
+          : <Redirect
+              to={{ pathname: '/', state: { from: routeProps.location } }}
+            />}
+    />
+  )
+}
