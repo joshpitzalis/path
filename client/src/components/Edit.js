@@ -1,22 +1,19 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import '../../public/toggle.css'
-import { database } from '../firebase.js'
+import { auth, database } from '../firebase.js'
 
-class Edit extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      tut: {},
-      redirect: null
-    }
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+export default class Edit extends React.Component {
+  state = {
+    tut: {},
+    redirect: null
   }
 
   componentDidMount() {
     database
-      .ref(`/tutorials/${this.props.match.params.tutId}`)
+      .ref(
+        `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
+      )
       .once('value')
       .then(snap => this.setState({ tut: snap.val() }))
   }
@@ -29,10 +26,12 @@ class Edit extends React.Component {
     this.setState({ tut: obj })
   }
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault()
     database
-      .ref(`/tutorials/${this.props.match.params.tutId}`)
+      .ref(
+        `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
+      )
       .update({ ...this.state.tut })
     this.setState({ redirect: true })
   }
@@ -47,7 +46,6 @@ class Edit extends React.Component {
         <form
           onSubmit={this.handleSubmit}
           className="mh4 mv4  ba b--black-10 ph4 br3">
-
           <article className="center w-100 br3 hidden ba b--black-10 mv4">
             <div className="br3 br--top">
               <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate">
@@ -71,20 +69,17 @@ class Edit extends React.Component {
                   value={this.state.tut.author}
                 />
               </h2>
-
               <textarea
                 className="bn outline-0 bg-transparent w-100 input-reset f6 f5-ns lh-copy mw5 mw6-ns"
                 style={{ resize: 'none' }}
                 cols="70"
                 rows="5"
                 onChange={this.handleChange}
-                name="desc">
-                {this.state.tut.description}
-              </textarea>
-
+                name="desc"
+                value={this.state.tut.description}
+              />
             </div>
           </article>
-
           <p>
             <input
               className="pa2 mb2 input-reset ba bg-transparent w-100 "
@@ -95,7 +90,6 @@ class Edit extends React.Component {
               value={this.state.tut.link}
             />
           </p>
-
           <input
             className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 mb3"
             type="submit"
@@ -106,5 +100,3 @@ class Edit extends React.Component {
     )
   }
 }
-
-export default Edit

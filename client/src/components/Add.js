@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { database } from '../firebase.js'
+import { auth, database } from '../firebase.js'
 import { Redirect } from 'react-router-dom'
 
 export default class Add extends Component {
@@ -17,7 +17,9 @@ export default class Add extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    database.ref('/tutorials').push({ ...this.state.tut })
+    database
+      .ref(`/${auth.currentUser.uid}/tutorials`)
+      .push({ ...this.state.tut })
     this.setState({ redirect: true })
   }
 
