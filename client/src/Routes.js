@@ -11,7 +11,7 @@ import {
 import Nav from './components/Nav.js'
 import Home from './components/Home'
 // import Group from './components/Group'
-import Profile from './components/Profile'
+import Path from './components/Path'
 import Edit from './components/Edit'
 import Add from './components/Add'
 import { auth } from './firebase.js'
@@ -64,7 +64,7 @@ export default class App extends Component {
               <PrivateRoute
                 authed={this.state.authed}
                 path="/profile"
-                component={Profile}
+                component={Path}
                 uid={this.state.uid}
               />
               <PrivateRoute

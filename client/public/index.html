@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.6.1/css/tachyons.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/attoflex@latest/atto.min.css"/>
     <style>
       .bg-cucumber {
         background-color: #85AF4B
@@ -11,6 +12,48 @@
       .hero {
         background-image: url('http://mrmrs.io/photos/u/011.jpg')
       }
+      .mla {
+        margin-left: auto;
+      }
+      .mra {
+        margin-right: auto;
+      }
+      .ml2px{
+        margin-left: 2px
+      }
+      .dot::before {
+          content: url(./images/circle.svg);
+          position: relative;
+          right: 13px;
+          top: 16px;
+
+        }
+
+        .dot:hover::before {
+            content: url(./images/check-circle.svg);
+            position: relative;
+            right: 13px;
+            top: 16px;
+            cursor: pointer;
+          }
+
+          .done-dot::after {
+              content: url(./images/green-check-circle.svg);
+              position: relative;
+              left: 102px;
+              bottom: 79px;
+            }
+
+            .clickCompleted {
+            width: 20px;
+            height:20px;
+              cursor: pointer;
+              position: relative;
+              right:35px;
+              top:10px;
+              display: inline-block
+            }
+
     </style>
     <!--
       Notice the use of %PUBLIC_URL% in the tag above.
