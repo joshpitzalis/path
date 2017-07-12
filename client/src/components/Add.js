@@ -10,7 +10,8 @@ export default class Add extends Component {
       author: null,
       desc: null,
       link: null,
-      uid: this.props.uid
+      uid: this.props.uid,
+      completed: false
     },
     redirect: false
   }
@@ -38,8 +39,9 @@ export default class Add extends Component {
     return (
       <div className="flex flex-wrap justify-center ">
         <form
-          className="mh4 mv4  ba b--black-10 ph4 br3"
-          onSubmit={this.handleSubmit}>
+          className="mh4 mv4 ba b--black-10 ph4 br3"
+          onSubmit={this.handleSubmit}
+        >
           <article className="center w-100 br3 hidden ba b--black-10 mv4">
             <div className="br3 br--top">
               <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate">
@@ -73,10 +75,10 @@ export default class Add extends Component {
                 rows="5"
                 placeholder="What is this tutorial about?"
                 onChange={this.handleChange}
-                name="desc">
+                name="desc"
+              >
                 {this.state.tut.desc}
               </textarea>
-
             </div>
           </article>
 
