@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Tutorial from './Tutorial'
 import { auth, database } from '../firebase.js'
+import Stats from './Stats'
 
 export default class Profile extends Component {
   state = {
@@ -46,6 +47,7 @@ export default class Profile extends Component {
 
     return (
       <div>
+        <Stats completed={completedTutorials.length} total={tutorials.length} />
         <div className="flex col wrap mw7 center">
           {completedTutorials}
           {tutorials}
