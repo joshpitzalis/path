@@ -1,4 +1,7 @@
 # path
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b3aad09daeec4fe982181068cdd47383)](https://www.codacy.com/app/joshpitzalis/path?utm_source=github.com&utm_medium=referral&utm_content=joshpitzalis/path&utm_campaign=badger)
+
 A learning path creator and tracker.
 
 - [x] Create authenticated user profiles
