@@ -1,5 +1,6 @@
-# path
-A learning path creator and tracker.
+# Path
+
+Save and que tutorials you want to do.
 
 - [x] Create authenticated user profiles
 - [x] Let users add tutorials to their profiles.
