@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
-// import Login from './components/Login'
+import Login from './components/Login'
 import Nav from './components/Nav.js'
 import Home from './components/Home'
 // import Group from './components/Group'
@@ -8,6 +8,7 @@ import Path from './components/Path'
 import Edit from './components/Edit'
 import Add from './components/Add'
 import { auth } from './firebase.js'
+import { GC_USER_ID, GC_AUTH_TOKEN } from './constants'
 
 export default class App extends Component {
   state = {
@@ -18,7 +19,6 @@ export default class App extends Component {
 
   componentDidMount() {
     this.removeListener = auth.onAuthStateChanged(user => {
-      console.log()
       if (user) {
         this.setState({
           authed: true,
@@ -42,12 +42,14 @@ export default class App extends Component {
     if (this.state.redirectTo) {
       return <Redirect to={'/profile'} />
     }
+
     return this.state.loading === true
       ? <h1 className="tc pt5">Loading...</h1>
       : <BrowserRouter>
           <div>
             <PropsRoute path="/" component={Nav} authed={this.state.authed} />
             <Switch>
+              <Route exact path="/login" component={Login} />
               <PropsRoute
                 path="/"
                 exact

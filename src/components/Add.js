@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
-// import { auth, database } from '../firebase.js'
 import { Redirect } from 'react-router-dom'
 import { graphql, gql } from 'react-apollo'
+import { GC_USER_ID } from '../constants'
 
 class Add extends Component {
   state = {
@@ -17,25 +16,23 @@ class Add extends Component {
     redirect: false
   }
 
-  // handleSubmit = e => {
-  //   e.preventDefault()
-  //   database
-  //     .ref(`/${auth.currentUser.uid}/tutorials`)
-  //     .push({ ...this.state.tut })
-  //   this.setState({ redirect: true })
-  // }
-
   handleSubmit = async e => {
     e.preventDefault()
+    const postedById = localStorage.getItem(GC_USER_ID)
+    if (!postedById) {
+      console.error('No User logged in')
+      return
+    }
     const { author, link, title } = this.state.tut
     await this.props.createTutorialMutation({
       variables: {
         author,
         link,
-        title
+        title,
+        postedById
       }
     })
-    await this.setState({ redirect: true })
+    this.setState({ redirect: true })
   }
 
   handleChange = e => {
@@ -123,11 +120,21 @@ const CREATE_TUTORIAL_MUTATION = gql`
     $author: String
     $link: String
     $title: String!
+    $postedById: ID!
   ) {
-    createTutorial(author: $author, link: $link, title: $title) {
+    createTutorial(
+      author: $author
+      link: $link
+      title: $title
+      postedById: $postedById
+    ) {
       author
       link
       title
+      postedBy {
+        id
+        name
+      }
     }
   }
 `

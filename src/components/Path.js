@@ -55,37 +55,31 @@ class MyPath extends Component {
     const allTuts = this.props.allTutorialsQuery.allTutorials
     return (
       <div>
-        {allTuts &&
-          allTuts.map(tut =>
-            <Tutorial
-              key={tut.id}
-              title={tut.title}
-              description={tut.description}
-              author={tut.author}
-              link={tut.link}
-              tutId={tut.id}
-              completed={tut.completed}
-            />
-          )}
-        <Link
-          to="/add"
-          className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 center"
-        >
-          Add A Tutorial
-        </Link>
-        <Stats completed={completedTutorials.length} total={tutorials.length} />
         <div className="flex col wrap mw7 center">
-          {completedTutorials}
-          {tutorials}
+          {allTuts &&
+            allTuts.map(tut =>
+              <Tutorial
+                key={tut.id}
+                title={tut.title}
+                description={tut.description}
+                author={tut.author}
+                link={tut.link}
+                tutId={tut.id}
+                completed={tut.completed}
+              />
+            )}
         </div>
         <div className="tc">
           <Link
             to="/add"
-            className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 center"
+            className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 tc"
           >
             Add A Tutorial
           </Link>
         </div>
+        <Stats completed={completedTutorials.length} total={tutorials.length} />
+        {/* {completedTutorials}
+        {tutorials} */}
       </div>
     )
   }

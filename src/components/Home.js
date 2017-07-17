@@ -46,7 +46,8 @@ export default class Home extends Component {
                 onClick={() =>
                   auth
                     .signInWithPopup(googleAuthProvider)
-                    .catch(error => console.log(error))}>
+                    .catch(error => console.log(error))}
+              >
                 Sign Up
               </a>
             </div>
