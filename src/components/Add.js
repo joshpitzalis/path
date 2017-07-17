@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { auth, database } from '../firebase.js'
+// import PropTypes from 'prop-types'
+// import { auth, database } from '../firebase.js'
 import { Redirect } from 'react-router-dom'
+import { graphql, gql } from 'react-apollo'
 
-export default class Add extends Component {
+class Add extends Component {
   state = {
     tut: {
       title: null,
@@ -16,12 +17,25 @@ export default class Add extends Component {
     redirect: false
   }
 
-  handleSubmit = e => {
+  // handleSubmit = e => {
+  //   e.preventDefault()
+  //   database
+  //     .ref(`/${auth.currentUser.uid}/tutorials`)
+  //     .push({ ...this.state.tut })
+  //   this.setState({ redirect: true })
+  // }
+
+  handleSubmit = async e => {
     e.preventDefault()
-    database
-      .ref(`/${auth.currentUser.uid}/tutorials`)
-      .push({ ...this.state.tut })
-    this.setState({ redirect: true })
+    const { author, link, title } = this.state.tut
+    await this.props.createTutorialMutation({
+      variables: {
+        author,
+        link,
+        title
+      }
+    })
+    await this.setState({ redirect: true })
   }
 
   handleChange = e => {
@@ -103,3 +117,21 @@ export default class Add extends Component {
     )
   }
 }
+
+const CREATE_TUTORIAL_MUTATION = gql`
+  mutation CreateTutorialMutation(
+    $author: String
+    $link: String
+    $title: String!
+  ) {
+    createTutorial(author: $author, link: $link, title: $title) {
+      author
+      link
+      title
+    }
+  }
+`
+
+export default graphql(CREATE_TUTORIAL_MUTATION, {
+  name: 'createTutorialMutation'
+})(Add)

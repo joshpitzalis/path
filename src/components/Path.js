@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import Tutorial from './Tutorial'
 import { auth, database } from '../firebase.js'
 import Stats from './Stats'
+import { graphql, gql } from 'react-apollo'
 
-export default class Profile extends Component {
+class MyPath extends Component {
   state = {
     tutorials: []
   }
@@ -40,13 +41,38 @@ export default class Profile extends Component {
           author={this.state.tutorials[tut].author}
           link={this.state.tutorials[tut].link}
           tutId={tut}
-          completed={true}
           completed={this.state.tutorials[tut].completed}
         />
       )
 
+    if (this.props.allLinksQuery && this.props.allTutorialsQuery.loading) {
+      return <div>Loading graphs...</div>
+    }
+    if (this.props.allLinksQuery && this.props.allTutorialsQuery.error) {
+      return <div>Error</div>
+    }
+
+    const allTuts = this.props.allTutorialsQuery.allTutorials
     return (
       <div>
+        {allTuts &&
+          allTuts.map(tut =>
+            <Tutorial
+              key={tut.id}
+              title={tut.title}
+              description={tut.description}
+              author={tut.author}
+              link={tut.link}
+              tutId={tut.id}
+              completed={tut.completed}
+            />
+          )}
+        <Link
+          to="/add"
+          className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 center"
+        >
+          Add A Tutorial
+        </Link>
         <Stats completed={completedTutorials.length} total={tutorials.length} />
         <div className="flex col wrap mw7 center">
           {completedTutorials}
@@ -64,3 +90,21 @@ export default class Profile extends Component {
     )
   }
 }
+
+const ALL_TUTORIALS_QUERY = gql`
+  query AllTutorials {
+    allTutorials {
+      id
+      createdAt
+      author
+      completed
+      link
+      title
+      updatedAt
+    }
+  }
+`
+
+export default graphql(ALL_TUTORIALS_QUERY, { name: 'allTutorialsQuery' })(
+  MyPath
+)
