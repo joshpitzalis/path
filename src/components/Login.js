@@ -12,6 +12,7 @@ class Login extends Component {
 
   confirm = async () => {
     const { name, email, password } = this.state
+
     if (this.state.login) {
       const result = await this.props.signinUserMutation({
         variables: {
@@ -20,6 +21,7 @@ class Login extends Component {
         }
       })
       const id = result.data.signinUser.user.id
+      this.setState({ name: result.data.signinUser.user.name })
       const token = result.data.signinUser.token
       this.saveUserData(id, token)
     } else {
@@ -31,10 +33,11 @@ class Login extends Component {
         }
       })
       const id = result.data.signinUser.user.id
+      this.setState({ name: result.data.signinUser.user.name })
       const token = result.data.signinUser.token
       this.saveUserData(id, token)
     }
-    this.props.history.push('/')
+    this.props.history.push(`/${this.state.name}`)
   }
 
   saveUserData = (id, token) => {
@@ -55,7 +58,7 @@ class Login extends Component {
               onChange={e => this.setState({ name: e.target.value })}
               type="text"
               placeholder="Your name"
-              data-test="name"
+              data-test="username"
             />}
           <input
             value={this.state.email}
@@ -82,6 +85,7 @@ class Login extends Component {
           </button>
           <div
             className="pointer button"
+            data-test="needToCreateAccount"
             onClick={() => this.setState({ login: !this.state.login })}
           >
             {this.state.login
@@ -110,6 +114,7 @@ const CREATE_USER_MUTATION = gql`
       token
       user {
         id
+        name
       }
     }
   }
@@ -120,6 +125,7 @@ const SIGNIN_USER_MUTATION = gql`
       token
       user {
         id
+        name
       }
     }
   }

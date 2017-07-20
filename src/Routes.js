@@ -1,112 +1,30 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Login from './components/Login'
 import Nav from './components/Nav.js'
 import Home from './components/Home'
-// import Group from './components/Group'
 import Path from './components/Path'
 import Edit from './components/Edit'
 import Add from './components/Add'
-import { auth } from './firebase.js'
-import { GC_USER_ID, GC_AUTH_TOKEN } from './constants'
+import Account from './components/Account'
 
 export default class App extends Component {
-  state = {
-    authed: false,
-    loading: true,
-    uid: null
-  }
-
-  componentDidMount() {
-    this.removeListener = auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({
-          authed: true,
-          loading: false,
-          uid: user.uid
-        })
-      } else {
-        this.setState({
-          authed: false,
-          loading: false
-        })
-      }
-    })
-  }
-
-  componentWillUnmount() {
-    this.removeListener()
-  }
-
   render() {
-    if (this.state.redirectTo) {
-      return <Redirect to={'/profile'} />
-    }
-
-    return this.state.loading === true
-      ? <h1 className="tc pt5">Loading...</h1>
-      : <BrowserRouter>
-          <div>
-            <PropsRoute path="/" component={Nav} authed={this.state.authed} />
-            <Switch>
-              <Route exact path="/login" component={Login} />
-              <PropsRoute
-                path="/"
-                exact
-                component={Home}
-                authed={this.state.authed}
-              />
-              <PrivateRoute
-                authed={this.state.authed}
-                path="/profile"
-                component={Path}
-                uid={this.state.uid}
-              />
-              <PrivateRoute
-                authed={this.state.authed}
-                path="/edit/:tutId"
-                component={Edit}
-              />
-              <PrivateRoute
-                authed={this.state.authed}
-                path="/add"
-                component={Add}
-                uid={this.state.uid}
-              />
-              <Route render={() => <h3>No Match</h3>} />
-            </Switch>
-          </div>
-        </BrowserRouter>
+    return (
+      <BrowserRouter>
+        <div>
+          <Route path="/" component={Nav} />
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/login" component={Login} />
+            <Route path="/edit/:tutId" component={Edit} />
+            <Route path="/add" component={Add} />
+            <Route path="/account" component={Account} />
+            <Route path="/:username" component={Path} />
+            <Route render={() => <h3>No Match</h3>} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    )
   }
-}
-
-// These hoc components allow you to pass props into a route component
-const renderMergedProps = (component, ...rest) => {
-  const finalProps = Object.assign({}, ...rest)
-  return React.createElement(component, finalProps)
-}
-
-const PropsRoute = ({ component, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={routeProps => {
-        return renderMergedProps(component, routeProps, rest)
-      }}
-    />
-  )
-}
-
-const PrivateRoute = ({ component, authed, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={routeProps =>
-        authed === true
-          ? renderMergedProps(component, routeProps, rest)
-          : <Redirect
-              to={{ pathname: '/', state: { from: routeProps.location } }}
-            />}
-    />
-  )
 }

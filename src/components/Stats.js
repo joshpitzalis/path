@@ -5,7 +5,7 @@ const Stats = ({ total, completed }) =>
   <div className="bb bw1 b--black-10">
     <article className="pa3 pa5-ns" data-name="slab-stat-large">
       <h3 className="f6 ttu tracked">
-        {Math.floor(total / completed) || 0}% completed
+        {Math.floor(completed / total * 100) || 0}% completed
       </h3>
       <div className="cf">
         <dl className="db dib-l w-auto-l lh-title mr6-l">

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import '../../public/toggle.css'
-import { auth, database } from '../firebase.js'
+// import { auth, database } from '../firebase.js'
 
 export default class Edit extends React.Component {
   state = {
@@ -9,14 +9,14 @@ export default class Edit extends React.Component {
     redirect: null
   }
 
-  componentDidMount() {
-    database
-      .ref(
-        `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
-      )
-      .once('value')
-      .then(snap => this.setState({ tut: snap.val() }))
-  }
+  // componentDidMount() {
+  //   database
+  //     .ref(
+  //       `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
+  //     )
+  //     .once('value')
+  //     .then(snap => this.setState({ tut: snap.val() }))
+  // }
 
   handleChange = e => {
     let target = e.target.name
@@ -26,15 +26,15 @@ export default class Edit extends React.Component {
     this.setState({ tut: obj })
   }
 
-  handleSubmit = e => {
-    e.preventDefault()
-    database
-      .ref(
-        `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
-      )
-      .update({ ...this.state.tut })
-    this.setState({ redirect: true })
-  }
+  // handleSubmit = e => {
+  //   e.preventDefault()
+  //   database
+  //     .ref(
+  //       `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
+  //     )
+  //     .update({ ...this.state.tut })
+  //   this.setState({ redirect: true })
+  // }
 
   render() {
     if (this.state.redirect) {
@@ -45,7 +45,8 @@ export default class Edit extends React.Component {
       <div className="flex flex-wrap justify-center ">
         <form
           onSubmit={this.handleSubmit}
-          className="mh4 mv4  ba b--black-10 ph4 br3">
+          className="mh4 mv4  ba b--black-10 ph4 br3"
+        >
           <article className="center w-100 br3 hidden ba b--black-10 mv4">
             <div className="br3 br--top">
               <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate">
