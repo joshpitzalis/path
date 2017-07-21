@@ -28,31 +28,29 @@
           top: 16px;
 
         }
-
-        .dot:hover::before {
-            content: url(./images/check-circle.svg);
-            position: relative;
-            right: 13px;
-            top: 16px;
-            cursor: pointer;
-          }
-
-          .done-dot::after {
-              content: url(./images/green-check-circle.svg);
-              position: relative;
-              left: 102px;
-              bottom: 79px;
-            }
-
-            .clickCompleted {
-            width: 20px;
-            height:20px;
-              cursor: pointer;
-              position: relative;
-              right:35px;
-              top:10px;
-              display: inline-block
-            }
+      .dot:hover::before {
+          content: url(./images/check-circle.svg);
+          position: relative;
+          right: 13px;
+          top: 16px;
+          cursor: pointer;
+        }
+      .done-dot::after {
+          content: url(./images/green-check-circle.svg);
+          position: relative;
+          left: 102px;
+          bottom: 79px;
+        }
+      .clickCompleted {
+        width: 20px;
+        height:20px;
+        cursor: pointer;
+        position: relative;
+        right:35px;
+        top:10px;
+        display: inline-block;
+        z-index: 0;
+      }
 
     </style>
     <!--

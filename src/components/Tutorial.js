@@ -32,9 +32,7 @@ const Tutorial = ({ title, description, author, link, tutId, completed }) =>
       </p>
 
       <div className="fr">
-        <button // onClick={() =>
-          //   database
-        //   .ref(`/${auth.currentUser.uid}/tutorials/${tutId}`)
+        <button //   .ref(`/${auth.currentUser.uid}/tutorials/${tutId}`) //   database // onClick={() =>
         //   .remove()}
         className="f6 link dim br-pill ph3 pv2 mb2 dib bn white bg-red pointer">
           Delete

@@ -25,7 +25,6 @@ describe('authentication', function() {
     cy.get(`[data-test="password"]`).type('test123')
     cy.get(`[data-test="login"]`).click()
     cy.get(`[data-test="myAccount"]`).click()
-    cy.contains(username)
     cy.get(`[data-test="deleteAccount"]`).click()
     cy.url().should('not.include', username)
     cy.visit(`http://localhost:3000/login`)
@@ -36,10 +35,23 @@ describe('authentication', function() {
   })
 })
 
-// logout
-// login
-// not authenticated then you get reduirected from path or create
-// delete account
+// describe('tutorials', function() {
+//   it('creates a task', function() {
+//     cy.visit(`http://localhost:3000/login`)
+//     cy.get(`[data-test="email"]`).type('test@test.com')
+//     cy.get(`[data-test="password"]`).type('test123')
+//     cy.get(`[data-test="login"]`).click()
+//     cy.get(`[data-test="myAccount"]`).click()
+//     cy.contains(username)
+//     cy.get(`[data-test="deleteAccount"]`).click()
+//     cy.url().should('not.include', username)
+//     cy.visit(`http://localhost:3000/login`)
+//     cy.get(`[data-test="email"]`).type('test@test.com')
+//     cy.get(`[data-test="password"]`).type('test123')
+//     cy.get(`[data-test="login"]`).click()
+//     cy.url().should('not.include', username)
+//   })
+// })
 
 // create task
 // edit task
@@ -48,6 +60,8 @@ describe('authentication', function() {
 // filter by hashtag
 // delete task
 // delete account
+
+// not authenticated then you get reduirected from path or create
 
 // path => path.com/josh (will need to check that not is not taken)
 // edit date

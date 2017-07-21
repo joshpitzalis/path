@@ -47,7 +47,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="w-50 center">
+      <div className="w-50 center pt5">
         <h4 className="mv3">
           {this.state.login ? 'Login' : 'Sign Up'}
         </h4>

@@ -2,6 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Routes from './Routes'
 import { GC_AUTH_TOKEN } from './constants'
+import {
+  SubscriptionClient,
+  addGraphQLSubscriptions
+} from 'subscriptions-transport-ws'
 
 import {
   ApolloProvider,
@@ -12,6 +16,22 @@ import {
 const networkInterface = createNetworkInterface({
   uri: 'https://api.graph.cool/simple/v1/cj57mzschvlwl01188wd7opcs'
 })
+
+const wsClient = new SubscriptionClient(
+  'wss://subscriptions.graph.cool/v1/cj57mzschvlwl01188wd7opcs',
+  {
+    reconnect: true,
+    connectionParams: {
+      authToken: localStorage.getItem(GC_AUTH_TOKEN)
+    }
+  }
+)
+
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  networkInterface,
+  wsClient
+)
+
 networkInterface.use([
   {
     applyMiddleware(req, next) {
@@ -25,7 +45,9 @@ networkInterface.use([
   }
 ])
 
-const client = new ApolloClient({ networkInterface })
+const client = new ApolloClient({
+  networkInterface: networkInterfaceWithSubscriptions
+})
 
 ReactDOM.render(
   <ApolloProvider client={client}>

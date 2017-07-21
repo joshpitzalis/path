@@ -8,10 +8,8 @@ class Add extends Component {
     tut: {
       title: null,
       author: null,
-      desc: null,
       link: null,
-      uid: this.props.uid,
-      completed: false
+      uid: this.props.uid
     },
     redirect: false
   }
@@ -29,6 +27,7 @@ class Add extends Component {
         author,
         link,
         title,
+        completed: false,
         postedById
       }
     })
@@ -48,7 +47,7 @@ class Add extends Component {
       return <Redirect to={'/profile'} />
     }
     return (
-      <div className="flex flex-wrap justify-center ">
+      <div className="flex flex-wrap justify-center pt5">
         <form
           className="mh4 mv4 ba b--black-10 ph4 br3"
           onSubmit={this.handleSubmit}
@@ -78,18 +77,6 @@ class Add extends Component {
                   value={this.state.tut.author}
                 />
               </h2>
-
-              <textarea
-                className="bn outline-0 bg-transparent w-100 input-reset f6 f5-ns lh-copy mw5 mw6-ns"
-                style={{ resize: 'none' }}
-                cols="70"
-                rows="5"
-                placeholder="What is this tutorial about?"
-                onChange={this.handleChange}
-                name="desc"
-              >
-                {this.state.tut.desc}
-              </textarea>
             </div>
           </article>
 
@@ -121,12 +108,14 @@ const CREATE_TUTORIAL_MUTATION = gql`
     $link: String
     $title: String!
     $postedById: ID!
+    $completed: Boolean!
   ) {
     createTutorial(
       author: $author
       link: $link
       title: $title
       postedById: $postedById
+      completed: $completed
     ) {
       author
       link
@@ -135,6 +124,7 @@ const CREATE_TUTORIAL_MUTATION = gql`
         id
         name
       }
+      completed
     }
   }
 `

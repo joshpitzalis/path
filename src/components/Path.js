@@ -2,18 +2,56 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Tutorial from './Tutorial'
 import Stats from './Stats'
-import { graphql, gql } from 'react-apollo'
+import { graphql } from 'react-apollo'
+import { ALL_TUTORIALS_QUERY } from '../queries/tutorials.js'
 
 class MyPath extends Component {
+  // componentDidMount() {
+  //   this.subscribeToTutorials()
+  // }
+
+  // subscribeToTutorials = () => {
+  //   this.props.allTutorialsQuery.subscribeToMore({
+  //     document: gql`
+  //       subscription {
+  //         Tutorial(filter: { mutation_in: [CREATED] }) {
+  //           node {
+  //             id
+  //             createdAt
+  //             author
+  //             completed
+  //             link
+  //             title
+  //             updatedAt
+  //           }
+  //         }
+  //       }
+  //     `,
+  //     updateQuery: (previous, { subscriptionData }) => {
+  //       const newAllTutorials = [
+  //         subscriptionData.data.Tutorial.node,
+  //         ...previous.AllTutorials
+  //       ]
+  //       const result = {
+  //         ...previous,
+  //         allTurorials: newAllTutorials
+  //       }
+  //       return result
+  //     }
+  //   })
+  // }
+
   render() {
-    if (this.props.allLinksQuery && this.props.allTutorialsQuery.loading) {
-      return <div>Loading graphs...</div>
+    if (this.props.allTutorialsQuery && this.props.allTutorialsQuery.loading) {
+      return <div>Loading...</div>
     }
-    if (this.props.allLinksQuery && this.props.allTutorialsQuery.error) {
+    if (this.props.allTutorialsQuery && this.props.allTutorialsQuery.error) {
       return <div>Error</div>
     }
 
     const allTuts = this.props.allTutorialsQuery.allTutorials
+    const incompleteTuts =
+      allTuts && allTuts.filter(tut => tut.completed === false)
     const completedTuts =
       allTuts && allTuts.filter(tut => tut.completed === true)
     return (
@@ -33,8 +71,8 @@ class MyPath extends Component {
             )}
         </div>
         <div className="flex col wrap mw7 center">
-          {allTuts &&
-            allTuts.map(tut =>
+          {incompleteTuts &&
+            incompleteTuts.map(tut =>
               <Tutorial
                 key={tut.id}
                 title={tut.title}
@@ -60,20 +98,6 @@ class MyPath extends Component {
     )
   }
 }
-
-const ALL_TUTORIALS_QUERY = gql`
-  query AllTutorials {
-    allTutorials {
-      id
-      createdAt
-      author
-      completed
-      link
-      title
-      updatedAt
-    }
-  }
-`
 
 export default graphql(ALL_TUTORIALS_QUERY, { name: 'allTutorialsQuery' })(
   MyPath

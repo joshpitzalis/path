@@ -1,14 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { GC_USER_ID, GC_AUTH_TOKEN } from '../constants'
+import { getUsername } from '../queries/user.js'
+import { graphql } from 'react-apollo'
 
 class Nav extends Component {
   render() {
     const userId = localStorage.getItem(GC_USER_ID)
     return (
-      <nav className="flex justify-between bb b--black-10">
+      <nav className="flex justify-between bb b--black-10 fixed w-100 bg-white z-999">
         <Link
-          to="/"
+          to={
+            this.props.data.user && this.props.data.user.name
+              ? `/${this.props.data.user.name}`
+              : '/'
+          }
           className="link white-70 hover-white no-underline flex items-center pa3"
         >
           <svg className="dib h1 w1" data-icon="grid" viewBox="0 0 32 32">
@@ -51,4 +57,4 @@ class Nav extends Component {
   }
 }
 
-export default Nav
+export default graphql(getUsername)(Nav)
