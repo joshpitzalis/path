@@ -2,44 +2,47 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Tutorial from './Tutorial'
 import Stats from './Stats'
-import { graphql } from 'react-apollo'
+import { graphql, gql } from 'react-apollo'
 import { ALL_TUTORIALS_QUERY } from '../queries/tutorials.js'
 
 class MyPath extends Component {
-  // componentDidMount() {
-  //   this.subscribeToTutorials()
-  // }
+  componentDidMount() {
+    this.subscribeToTutorials()
+  }
 
-  // subscribeToTutorials = () => {
-  //   this.props.allTutorialsQuery.subscribeToMore({
-  //     document: gql`
-  //       subscription {
-  //         Tutorial(filter: { mutation_in: [CREATED] }) {
-  //           node {
-  //             id
-  //             createdAt
-  //             author
-  //             completed
-  //             link
-  //             title
-  //             updatedAt
-  //           }
-  //         }
-  //       }
-  //     `,
-  //     updateQuery: (previous, { subscriptionData }) => {
-  //       const newAllTutorials = [
-  //         subscriptionData.data.Tutorial.node,
-  //         ...previous.AllTutorials
-  //       ]
-  //       const result = {
-  //         ...previous,
-  //         allTurorials: newAllTutorials
-  //       }
-  //       return result
-  //     }
-  //   })
-  // }
+  subscribeToTutorials = () => {
+    this.props.allTutorialsQuery.subscribeToMore({
+      document: gql`
+        subscription {
+          Tutorial(filter: { mutation_in: [CREATED] }) {
+            node {
+              id
+              createdAt
+              author
+              completed
+              link
+              title
+              updatedAt
+            }
+          }
+        }
+      `,
+      updateQuery: (previous, { subscriptionData }) => {
+        const newAllTutorials = [
+          subscriptionData.data.Tutorial.node,
+          ...previous.allTutorials
+        ]
+        console.log(newAllTutorials)
+        const result = {
+          ...previous,
+          allTutorials: newAllTutorials
+        }
+        console.log(result)
+        return result
+      },
+      onError: err => console.error(err)
+    })
+  }
 
   render() {
     if (this.props.allTutorialsQuery && this.props.allTutorialsQuery.loading) {
@@ -58,9 +61,9 @@ class MyPath extends Component {
       <div>
         <div className="flex col wrap mw7 center">
           {completedTuts &&
-            completedTuts.map(tut =>
+            completedTuts.map((tut, index) =>
               <Tutorial
-                key={tut.id}
+                key={index}
                 title={tut.title}
                 description={tut.description}
                 author={tut.author}
@@ -72,9 +75,9 @@ class MyPath extends Component {
         </div>
         <div className="flex col wrap mw7 center">
           {incompleteTuts &&
-            incompleteTuts.map(tut =>
+            incompleteTuts.map((tut, index) =>
               <Tutorial
-                key={tut.id}
+                key={index}
                 title={tut.title}
                 description={tut.description}
                 author={tut.author}

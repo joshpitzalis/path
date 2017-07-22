@@ -6,9 +6,9 @@ import { GC_USER_ID } from '../constants'
 class Add extends Component {
   state = {
     tut: {
-      title: null,
-      author: null,
-      link: null,
+      title: undefined,
+      author: undefined,
+      link: undefined,
       uid: this.props.uid
     },
     redirect: false

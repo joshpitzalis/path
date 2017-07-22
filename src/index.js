@@ -21,6 +21,7 @@ const wsClient = new SubscriptionClient(
   'wss://subscriptions.graph.cool/v1/cj57mzschvlwl01188wd7opcs',
   {
     reconnect: true,
+    timeout: 20000,
     connectionParams: {
       authToken: localStorage.getItem(GC_AUTH_TOKEN)
     }
