@@ -32,12 +32,10 @@ class MyPath extends Component {
           subscriptionData.data.Tutorial.node,
           ...previous.allTutorials
         ]
-        console.log(newAllTutorials)
         const result = {
           ...previous,
           allTutorials: newAllTutorials
         }
-        console.log(result)
         return result
       },
       onError: err => console.error(err)
@@ -90,6 +88,7 @@ class MyPath extends Component {
         <div className="tc">
           <Link
             to="/add"
+            data-test="add"
             className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 tc"
           >
             Add A Tutorial

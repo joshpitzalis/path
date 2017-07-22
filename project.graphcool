@@ -1,5 +1,5 @@
 # project: cj57mzschvlwl01188wd7opcs
-# version: 4
+# version: 7
 
 type User implements Node {
   id: ID! @isUnique
