@@ -103,6 +103,7 @@ class Add extends Component {
               </h2>
 
               <ReactTags
+                data-test="tags"
                 tags={this.state.tut.tags}
                 handleDelete={this.handleTagDelete}
                 handleAddition={this.handleTagAddition}
