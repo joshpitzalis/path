@@ -55,16 +55,11 @@ class Add extends Component {
   handleTagAddition = tag => {
     let tut = this.state.tut
     tut.tags.push({
-      id: tut.tags.length + 1,
-      text: tag[0] === '#' ? tag.toLowerCase() : `#${tag.toLowerCase()}`
+      text:
+        tag[0] === '#'
+          ? tag.toLowerCase().split('').shift().join(',')
+          : tag.toLowerCase()
     })
-    this.setState({ tut })
-  }
-
-  handleTagDrag = (tag, currPos, newPos) => {
-    let tut = this.state.tut
-    tut.tags.splice(currPos, 1)
-    tut.tags.splice(newPos, 0, tag)
     this.setState({ tut })
   }
 
@@ -111,7 +106,6 @@ class Add extends Component {
                 tags={this.state.tut.tags}
                 handleDelete={this.handleTagDelete}
                 handleAddition={this.handleTagAddition}
-                handleDrag={this.handleTagDrag}
               />
             </div>
           </article>
@@ -145,27 +139,30 @@ const CREATE_TUTORIAL_MUTATION = gql`
     $author: String
     $link: String
     $title: String!
-    $tags: ???
-    $postedById: ID!
+    $tags: [TutorialtagsTag!]
     $completed: Boolean!
+    $postedById: ID!
   ) {
     createTutorial(
       author: $author
       link: $link
       title: $title
-      postedById: $postedById
-      completed: $completed
       tags: $tags
+      completed: $completed
+      postedById: $postedById
     ) {
       author
       link
       title
-      tags
       postedBy {
         id
         name
       }
       completed
+      tags {
+        id
+        text
+      }
     }
   }
 `

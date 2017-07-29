@@ -2,58 +2,17 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Tutorial from './Tutorial'
 import Stats from './Stats'
-import { graphql, gql } from 'react-apollo'
-import { ALL_TUTORIALS_QUERY } from '../queries/tutorials.js'
+import { graphql, gql, compose } from 'react-apollo'
+import { GC_USER_ID, GC_AUTH_TOKEN } from '../constants'
+import { ALL_TUTORIALS_FILTER_QUERY } from '../queries/tutorials.js'
+import { getUsername } from '../queries/user.js'
 
-class MyPath extends Component {
+class Results extends Component {
   componentDidMount() {
-    this.subscribeToTutorials()
+    this.props.ALL_TUTORIALS_FILTER_QUERY
   }
-
-  subscribeToTutorials = () => {
-    this.props.allTutorialsQuery.subscribeToMore({
-      document: gql`
-        subscription {
-          Tutorial(filter: { mutation_in: [CREATED] }) {
-            node {
-              id
-              createdAt
-              author
-              completed
-              link
-              title
-              tags {
-                text
-              }
-              updatedAt
-            }
-          }
-        }
-      `,
-      updateQuery: (previous, { subscriptionData }) => {
-        const newAllTutorials = [
-          subscriptionData.data.Tutorial.node,
-          ...previous.allTutorials
-        ]
-        const result = {
-          ...previous,
-          allTutorials: newAllTutorials
-        }
-        return result
-      },
-      onError: err => console.error(err)
-    })
-  }
-
   render() {
-    if (this.props.allTutorialsQuery && this.props.allTutorialsQuery.loading) {
-      return <div>Loading...</div>
-    }
-    if (this.props.allTutorialsQuery && this.props.allTutorialsQuery.error) {
-      return <div>Error</div>
-    }
-
-    const allTuts = this.props.allTutorialsQuery.allTutorials
+    const allTuts = this.props.data.allTutorials
     const incompleteTuts =
       allTuts && allTuts.filter(tut => tut.completed === false)
     const completedTuts =
@@ -92,11 +51,14 @@ class MyPath extends Component {
         </div>
         <div className="tc">
           <Link
-            to="/add"
+            to={
+              !this.props.username.loading &&
+              `/${this.props.username.user.name}`
+            }
             data-test="add"
             className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 tc"
           >
-            Add A Tutorial
+            Back To All Tutorials
           </Link>
         </div>
         {allTuts &&
@@ -106,6 +68,9 @@ class MyPath extends Component {
   }
 }
 
-export default graphql(ALL_TUTORIALS_QUERY, { name: 'allTutorialsQuery' })(
-  MyPath
-)
+export default compose(
+  graphql(getUsername, { name: 'username' }),
+  graphql(ALL_TUTORIALS_FILTER_QUERY, {
+    options: props => ({ variables: { searchText: props.match.params.result } })
+  })
+)(Results)

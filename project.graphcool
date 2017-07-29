@@ -1,5 +1,5 @@
 # project: cj57mzschvlwl01188wd7opcs
-# version: 7
+# version: 12
 
 type User implements Node {
   id: ID! @isUnique
@@ -31,4 +31,13 @@ type Tutorial implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   postedBy: User @relation(name: "UsersTutorials")
+  tags: [Tag!]! @relation(name: "TutorialTags")
+}
+
+type Tag {
+  id: ID! @isUnique
+  text: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  tutorials: [Tutorial!]! @relation(name: "TutorialTags")
 }

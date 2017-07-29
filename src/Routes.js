@@ -7,6 +7,7 @@ import Path from './components/Path'
 import Edit from './components/Edit'
 import Add from './components/Add'
 import Account from './components/Account'
+import Results from './components/Results'
 
 export default class App extends Component {
   render() {
@@ -20,6 +21,7 @@ export default class App extends Component {
             <Route path="/edit/:tutId" component={Edit} />
             <Route path="/add" component={Add} />
             <Route path="/account" component={Account} />
+            <Route path="/search/:result" component={Results} />
             <Route path="/:username" component={Path} />
             <Route render={() => <h3>No Match</h3>} />
           </Switch>
