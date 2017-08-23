@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { auth, database } from '../firebase.js'
 import { Redirect } from 'react-router-dom'
+import { WithContext as ReactTags } from 'react-tag-input'
 
 export default class Add extends Component {
   state = {
@@ -11,9 +12,15 @@ export default class Add extends Component {
       desc: null,
       link: null,
       uid: this.props.uid,
-      completed: false
+      completed: false,
+      tags: []
     },
-    redirect: false
+    redirect: false,
+    suggestions: ['mango', 'pineapple', 'orange', 'pear']
+  }
+
+  componentDidMount() {
+    // load tags from firebase
   }
 
   handleSubmit = e => {
@@ -30,6 +37,32 @@ export default class Add extends Component {
     let obj = { ...this.state.tut }
     obj[target] = value
     this.setState({ tut: obj })
+  }
+
+  handleDelete = i => {
+    let tags = this.state.tut.tags
+    tags.splice(i, 1)
+    this.setState({ tags: tags })
+  }
+
+  handleAddition = tag => {
+    let tags = this.state.tut.tags
+    tags.push({
+      id: tags.length + 1,
+      text: tag
+    })
+    this.setState({ tags: tags })
+  }
+
+  handleDrag = (tag, currPos, newPos) => {
+    let tags = this.state.tut.tags
+
+    // mutate array
+    tags.splice(currPos, 1)
+    tags.splice(newPos, 0, tag)
+
+    // re-render
+    this.setState({ tags: tags })
   }
 
   render() {
@@ -68,7 +101,7 @@ export default class Add extends Component {
                 />
               </h2>
 
-              <textarea
+              {/* <textarea
                 className="bn outline-0 bg-transparent w-100 input-reset f6 f5-ns lh-copy mw5 mw6-ns"
                 style={{ resize: 'none' }}
                 cols="70"
@@ -76,9 +109,16 @@ export default class Add extends Component {
                 placeholder="What is this tutorial about?"
                 onChange={this.handleChange}
                 name="desc"
-              >
+                >
                 {this.state.tut.desc}
-              </textarea>
+              </textarea> */}
+              <ReactTags
+                tags={this.state.tut.tags}
+                suggestions={this.state.suggestions}
+                handleDelete={this.handleDelete}
+                handleAddition={this.handleAddition}
+                handleDrag={this.handleDrag}
+              />
             </div>
           </article>
 

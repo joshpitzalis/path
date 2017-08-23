@@ -12,6 +12,8 @@ export default class Profile extends Component {
   componentDidMount() {
     database
       .ref(`/${auth.currentUser.uid}/tutorials`)
+      .orderByChild(this.props.match.params.tag)
+      .equalTo(true)
       .on('value', snap => this.setState({ tutorials: snap.val() }))
   }
 
@@ -56,10 +58,10 @@ export default class Profile extends Component {
         </div>
         <div className="tc">
           <Link
-            to="/add"
-            className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 center"
+            to="/profile"
+            className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 center ttu"
           >
-            Add A Tutorial
+            Back To Tutorials
           </Link>
         </div>
         <Stats completed={completedTutorials.length} total={tutorials.length} />

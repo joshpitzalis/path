@@ -14,6 +14,7 @@ import Home from './components/Home'
 import Path from './components/Path'
 import Edit from './components/Edit'
 import Add from './components/Add'
+import Tags from './components/Tags'
 import { auth } from './firebase.js'
 
 export default class App extends Component {
@@ -25,7 +26,6 @@ export default class App extends Component {
 
   componentDidMount() {
     this.removeListener = auth.onAuthStateChanged(user => {
-      console.log()
       if (user) {
         this.setState({
           authed: true,
@@ -65,6 +65,12 @@ export default class App extends Component {
                 authed={this.state.authed}
                 path="/profile"
                 component={Path}
+                uid={this.state.uid}
+              />
+              <PrivateRoute
+                authed={this.state.authed}
+                path="/tags/:tag"
+                component={Tags}
                 uid={this.state.uid}
               />
               <PrivateRoute
