@@ -25,6 +25,7 @@ export default class Profile extends Component {
           description={this.state.tutorials[tut].description}
           author={this.state.tutorials[tut].author}
           link={this.state.tutorials[tut].link}
+          tags={this.state.tutorials[tut].tags}
           tutId={tut}
           completed={this.state.tutorials[tut].completed}
         />
@@ -39,6 +40,7 @@ export default class Profile extends Component {
           description={this.state.tutorials[tut].description}
           author={this.state.tutorials[tut].author}
           link={this.state.tutorials[tut].link}
+          tags={this.state.tutorials[tut].tags}
           tutId={tut}
           completed={true}
           completed={this.state.tutorials[tut].completed}
@@ -47,7 +49,6 @@ export default class Profile extends Component {
 
     return (
       <div>
-        <Stats completed={completedTutorials.length} total={tutorials.length} />
         <div className="flex col wrap mw7 center">
           {completedTutorials}
           {tutorials}
@@ -60,6 +61,7 @@ export default class Profile extends Component {
             Add A Tutorial
           </Link>
         </div>
+        <Stats completed={completedTutorials.length} total={tutorials.length} />
       </div>
     )
   }

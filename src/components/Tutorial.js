@@ -2,7 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { auth, database } from '../firebase.js'
 
-const Tutorial = ({ title, description, author, link, tutId, completed }) =>
+const Tutorial = ({
+  title,
+  description,
+  author,
+  link,
+  tutId,
+  completed,
+  tags
+}) =>
   <article
     className={`w-50 b--black-10 bw1 pt5 ${completed
       ? 'br tr mra ml2px done-dot'
@@ -28,7 +36,12 @@ const Tutorial = ({ title, description, author, link, tutId, completed }) =>
         by {author}
       </h2>
       <p className="f6 f5-ns lh-copy measure">
-        {description}
+        {tags &&
+          tags.map(tag =>
+            <Link to={`/tags/${tag.text}`} key={tag.id} className="mr2 ttu">
+              {tag.text}
+            </Link>
+          )}
       </p>
 
       <div className="fr">
