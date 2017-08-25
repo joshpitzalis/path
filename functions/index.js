@@ -6,13 +6,19 @@ admin.initializeApp(functions.config().firebase)
 
 exports.syncTags = functions.database
   .ref('/{user}/tutorials/{tutorial}/tags')
-  .onWrite(event => {
+  .onCreate(event => {
     const tags = event.data.val()
-    console.log(tags)
     tags.map(tag =>
       admin
         .database()
         .ref(`/${event.params.user}/tutorials/${event.params.tutorial}`)
         .update({ [tag.text]: true })
     )
+  })
+
+exports.createNewTags = functions.database
+  .ref('/{user}/tutorials/{tutorial}/tags')
+  .onCreate(event => {
+    const tags = event.data.val()
+    tags.map(tag => admin.database().ref(`/tags`).update({ [tag.text]: true }))
   })

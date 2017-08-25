@@ -7,16 +7,23 @@ import { WithContext as ReactTags } from 'react-tag-input'
 export default class Edit extends React.Component {
   state = {
     tut: {},
-    redirect: null
+    redirect: null,
+    suggestions: []
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     database
       .ref(
         `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
       )
       .once('value')
       .then(snap => this.setState({ tut: snap.val() }))
+
+    const suggestions = await database
+      .ref(`/tags`)
+      .once('value')
+      .then(snap => snap.val())
+    this.setState({ suggestions: Object.keys(suggestions) })
   }
 
   handleChange = e => {

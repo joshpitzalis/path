@@ -16,11 +16,15 @@ export default class Add extends Component {
       tags: []
     },
     redirect: false,
-    suggestions: ['mango', 'pineapple', 'orange', 'pear']
+    suggestions: []
   }
 
-  componentDidMount() {
-    // load tags from firebase
+  async componentDidMount() {
+    const suggestions = await database
+      .ref(`/tags`)
+      .once('value')
+      .then(snap => snap.val())
+    this.setState({ suggestions: Object.keys(suggestions) })
   }
 
   handleSubmit = e => {

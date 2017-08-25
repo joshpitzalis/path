@@ -16,7 +16,6 @@ export default class Profile extends Component {
   }
 
   render() {
-    console.log('location', this.props.location)
     const tutorials = Object.keys(this.state.tutorials)
       .filter(tut => this.state.tutorials[tut].completed === false)
       .map((tut, index) =>
