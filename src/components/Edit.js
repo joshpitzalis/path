@@ -2,6 +2,7 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import '../../public/toggle.css'
 import { auth, database } from '../firebase.js'
+import { WithContext as ReactTags } from 'react-tag-input'
 
 export default class Edit extends React.Component {
   state = {
@@ -36,6 +37,44 @@ export default class Edit extends React.Component {
     this.setState({ redirect: true })
   }
 
+  handleChange = e => {
+    let target = e.target.name
+    let value = e.target.value
+    let obj = { ...this.state.tut }
+    obj[target] = value
+    this.setState({ tut: obj })
+  }
+
+  handleDelete = i => {
+    let tags = this.state.tut.tags
+    let tut = this.state.tut
+    const tag = tags[i].text
+    tut[tag] = false
+    this.setState()
+    tags.splice(i, 1)
+    this.setState({ tags: tags })
+  }
+
+  handleAddition = tag => {
+    let tags = this.state.tut.tags
+    tags.push({
+      id: tags.length + 1,
+      text: tag
+    })
+    this.setState({ tags: tags })
+  }
+
+  handleDrag = (tag, currPos, newPos) => {
+    let tags = this.state.tut.tags
+
+    // mutate array
+    tags.splice(currPos, 1)
+    tags.splice(newPos, 0, tag)
+
+    // re-render
+    this.setState({ tags: tags })
+  }
+
   render() {
     if (this.state.redirect) {
       return <Redirect to="/profile" />
@@ -45,7 +84,8 @@ export default class Edit extends React.Component {
       <div className="flex flex-wrap justify-center ">
         <form
           onSubmit={this.handleSubmit}
-          className="mh4 mv4  ba b--black-10 ph4 br3">
+          className="mh4 mv4  ba b--black-10 ph4 br3"
+        >
           <article className="center w-100 br3 hidden ba b--black-10 mv4">
             <div className="br3 br--top">
               <h1 className="f4 br3 br--top black-60 mv0 pv2 ph3 truncate">
@@ -69,7 +109,7 @@ export default class Edit extends React.Component {
                   value={this.state.tut.author}
                 />
               </h2>
-              <textarea
+              {/* <textarea
                 className="bn outline-0 bg-transparent w-100 input-reset f6 f5-ns lh-copy mw5 mw6-ns"
                 style={{ resize: 'none' }}
                 cols="70"
@@ -77,6 +117,13 @@ export default class Edit extends React.Component {
                 onChange={this.handleChange}
                 name="desc"
                 value={this.state.tut.description}
+              /> */}
+              <ReactTags
+                tags={this.state.tut.tags}
+                suggestions={this.state.suggestions}
+                handleDelete={this.handleDelete}
+                handleAddition={this.handleAddition}
+                handleDrag={this.handleDrag}
               />
             </div>
           </article>
