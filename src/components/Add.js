@@ -29,9 +29,13 @@ export default class Add extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    const newEntryKey = database.ref(`/example`).push().key
+    const newEntryKey = database
+      .ref(`/${auth.currentUser.uid}/tutorials/incompleted`)
+      .push().key
     const entry = { ...this.state.tut, tutId: newEntryKey }
-    database.ref(`/${auth.currentUser.uid}/tutorials/${newEntryKey}`).set(entry)
+    database
+      .ref(`/${auth.currentUser.uid}/tutorials/incompleted/${newEntryKey}`)
+      .set(entry)
     this.setState({ redirect: true })
   }
 
@@ -72,7 +76,7 @@ export default class Add extends Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={'/profile'} />
+      return <Redirect to={'/dashboard'} />
     }
     return (
       <div className="flex flex-wrap justify-center ">

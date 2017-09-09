@@ -11,8 +11,6 @@ import {
 import Nav from './components/Nav.js'
 import Dashboard from './components/Dashboard.js'
 import Home from './components/Home'
-// import Group from './components/Group'
-import Path from './components/Path'
 import Edit from './components/Edit'
 import Add from './components/Add'
 import Tags from './components/Tags'
@@ -48,7 +46,7 @@ export default class App extends Component {
 
   render() {
     if (this.state.redirectTo) {
-      return <Redirect to={'/profile'} />
+      return <Redirect to={'/dashboard'} />
     }
     return this.state.loading === true
       ? <h1 className="tc pt5">Loading...</h1>

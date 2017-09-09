@@ -21,7 +21,7 @@ export default class Home extends Component {
 
   render() {
     const { from } = this.props.location.state || {
-      from: { pathname: '/profile' }
+      from: { pathname: '/dashboard' }
     }
     const { redirectToReferrer } = this.state
 
@@ -46,7 +46,8 @@ export default class Home extends Component {
                 onClick={() =>
                   auth
                     .signInWithPopup(googleAuthProvider)
-                    .catch(error => console.log(error))}>
+                    .catch(error => console.log(error))}
+              >
                 Sign Up
               </a>
             </div>

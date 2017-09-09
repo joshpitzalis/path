@@ -24,7 +24,7 @@ const Nav = ({ authed, location }) =>
         </Link>}
     </div>
     <div className="flex-grow pa3 flex items-center w-33 justify-end">
-      <Link to="/profile" className="f6 link dib dark-gray dim mr3 mr4-ns">
+      <Link to="/dashboard" className="f6 link dib dark-gray dim mr3 mr4-ns">
         My Learning Path
       </Link>
       {authed

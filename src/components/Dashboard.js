@@ -160,7 +160,6 @@ export default class Dashboard extends Component {
       <div>
         <div className="flex col wrap mw7 center">
           {tutorials}
-          {completedTutorials}
         </div>
         <div className="tc">
           <Link
@@ -170,10 +169,13 @@ export default class Dashboard extends Component {
             Add A Tutorial
           </Link>
         </div>
-        <Stats
+        <div className="flex col wrap mw7 center">
+          {completedTutorials}
+        </div>
+        {/* <Stats
           completed={completedTutorials && completedTutorials.length}
           total={this.state.items && Object.keys(this.state.items).length}
-        />
+        /> */}
       </div>
     )
   }
