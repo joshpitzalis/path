@@ -6,9 +6,8 @@ import { Link } from 'react-router-dom'
 const Nav = ({ authed, location }) =>
   <nav className="flex justify-between bb b--black-10">
     <Link
-      to="/"
+      to="/dashboard"
       className="link white-70 hover-white no-underline flex items-center pa3 w-33"
-      href=""
     >
       <svg className="dib h1 w1" data-icon="grid" viewBox="0 0 32 32">
         <title>Super Normal Icon Mark</title>

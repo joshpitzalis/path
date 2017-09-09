@@ -29,9 +29,9 @@ export default class Add extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    database
-      .ref(`/${auth.currentUser.uid}/tutorials`)
-      .push({ ...this.state.tut })
+    const newEntryKey = database.ref(`/example`).push().key
+    const entry = { ...this.state.tut, tutId: newEntryKey }
+    database.ref(`/${auth.currentUser.uid}/tutorials/${newEntryKey}`).set(entry)
     this.setState({ redirect: true })
   }
 

@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom'
 // import Login from './components/Login'
 import Nav from './components/Nav.js'
+import Dashboard from './components/Dashboard.js'
 import Home from './components/Home'
 // import Group from './components/Group'
 import Path from './components/Path'
@@ -61,10 +62,11 @@ export default class App extends Component {
                 component={Home}
                 authed={this.state.authed}
               />
+
               <PrivateRoute
                 authed={this.state.authed}
-                path="/profile"
-                component={Path}
+                path="/dashboard"
+                component={Dashboard}
                 uid={this.state.uid}
               />
               <PrivateRoute
