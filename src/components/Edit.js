@@ -24,6 +24,11 @@ export default class Edit extends React.Component {
       .once('value')
       .then(snap => snap.val())
     this.setState({ suggestions: Object.keys(suggestions) })
+    if (!this.state.tags) {
+      const tut = this.state.tut
+      tut.tags = []
+      this.setState({ tut })
+    }
   }
 
   handleChange = e => {
@@ -84,7 +89,7 @@ export default class Edit extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to="/profile" />
+      return <Redirect to="/dashboard" />
     }
 
     return (

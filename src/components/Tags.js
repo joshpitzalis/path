@@ -4,7 +4,7 @@ import Tutorial from './Tutorial'
 import { auth, database } from '../firebase.js'
 import Stats from './Stats'
 
-export default class Profile extends Component {
+export default class Tags extends Component {
   state = {
     tutorials: []
   }
@@ -18,7 +18,6 @@ export default class Profile extends Component {
   }
 
   render() {
-    console.log('location', this.props.location)
     const tutorials = Object.keys(this.state.tutorials)
       .filter(tut => this.state.tutorials[tut].completed === false)
       .map((tut, index) =>
@@ -52,19 +51,19 @@ export default class Profile extends Component {
 
     return (
       <div>
+        {/* <Stats completed={completedTutorials.length} total={tutorials.length} /> */}
         <div className="flex col wrap mw7 center">
-          {completedTutorials}
           {tutorials}
+          {completedTutorials}
         </div>
         <div className="tc">
           <Link
-            to="/profile"
+            to="/dashboard"
             className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma5 center ttu"
           >
             Back To Tutorials
           </Link>
         </div>
-        <Stats completed={completedTutorials.length} total={tutorials.length} />
       </div>
     )
   }
