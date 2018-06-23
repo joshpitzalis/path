@@ -1,0 +1,20 @@
+:root {
+  --base: #454b60;
+  --white: #f9f9fa;
+}
+
+.bg-base {
+  background-color: var(--base);
+}
+
+.base {
+  color: var(--base);
+}
+
+.bg-white {
+  background-color: var(--white);
+}
+
+.white {
+  color: var(--white);
+}
