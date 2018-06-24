@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { doLogin } from './actions';
+import { doAuth } from './actions';
 
 class Home extends PureComponent {
   state = {
@@ -66,8 +66,10 @@ const select = store => ({
 });
 
 const actions = {
-  login: doLogin
+  login: doAuth
 };
+
+export const unwrappedLogin = Home;
 
 export default connect(
   select,
