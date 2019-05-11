@@ -5,13 +5,13 @@
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "flow-bin": "^0.75.0",
-    "react-scripts": "0.9.3"
+    "react-scripts": "^0.9.3"
   },
   "standard": {
     "parser": "babel-eslint"
   },
   "dependencies": {
-    "firebase": "^4.1.3",
+    "firebase": "^6.0.2",
     "react": "^15.4.2",
     "react-beautiful-dnd": "^2.0.1",
     "react-dnd": "^2.4.0",
