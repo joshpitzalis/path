@@ -1,8 +1,24 @@
-const functions = require('firebase-functions');
+const functions = require('firebase-functions')
+const admin = require('firebase-admin')
+admin.initializeApp(functions.config().firebase)
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+// add a tag key to each tutorial for every tag added
+
+exports.syncTags = functions.database
+  .ref('/{user}/tutorials/{tutorial}/tags')
+  .onCreate(event => {
+    const tags = event.data.val()
+    tags.map(tag =>
+      admin
+        .database()
+        .ref(`/${event.params.user}/tutorials/${event.params.tutorial}`)
+        .update({ [tag.text]: true })
+    )
+  })
+
+exports.createNewTags = functions.database
+  .ref('/{user}/tutorials/{tutorial}/tags')
+  .onCreate(event => {
+    const tags = event.data.val()
+    tags.map(tag => admin.database().ref(`/tags`).update({ [tag.text]: true }))
+  })
