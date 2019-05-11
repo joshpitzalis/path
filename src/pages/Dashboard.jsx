@@ -93,6 +93,7 @@ export default class Dashboard extends Component {
                               tags={item.tags}
                               tutId={item.tutId}
                               completed={item.completed}
+                              status='incompleted'
                             />
                           </div>
                           {provided.placeholder}
@@ -125,6 +126,7 @@ export default class Dashboard extends Component {
             tags={item.tags}
             tutId={item.tutId}
             completed={item.completed}
+            status='completed'
           />
         )}
         </div>

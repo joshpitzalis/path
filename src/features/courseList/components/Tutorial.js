@@ -9,7 +9,8 @@ const Tutorial = ({
   link,
   tutId,
   completed,
-  tags
+  tags,
+  status
 }) =>
   <article
     className={`w-50 b--black-10 bw1 pt5 ${completed
@@ -46,10 +47,18 @@ const Tutorial = ({
 
       <div className="fr">
         <button
-          onClick={() =>
+          onClick={() => 
             database
-              .ref(`/${auth.currentUser.uid}/tutorials/${tutId}`)
-              .remove()}
+              .ref(`/${auth.currentUser.uid}/tutorials/${status}`)
+              .orderByChild('tutId')
+              .equalTo(tutId)
+              .once('value')
+              .then(x =>  Object.keys(x.val()))
+              .then(index =>
+                database
+              .ref(`/${auth.currentUser.uid}/tutorials/${status}/${index}`).remove()
+                )
+         }
           className="f6 link dim br-pill ph3 pv2 mb2 dib bn white bg-red pointer"
         >
           Delete
@@ -57,7 +66,7 @@ const Tutorial = ({
       </div>
 
       <div className="fl pr3">
-        <Link to={`/edit/${tutId}`} className="black">
+        <Link to={`/edit/${tutId}/${status}`} className="black">
           Edit
         </Link>
       </div>

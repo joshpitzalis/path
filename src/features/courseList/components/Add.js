@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { WithContext as ReactTags } from 'react-tag-input';
-import { auth, database } from '../../../firebase.js';
+import { auth, database } from '../../../firebase';
 
 export default class Add extends Component {
   state = {

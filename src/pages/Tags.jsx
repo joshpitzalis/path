@@ -36,7 +36,8 @@ export default class Tags extends Component {
           author={this.state.incompleteTutorials[tut].author}
           link={this.state.incompleteTutorials[tut].link}
           tags={this.state.incompleteTutorials[tut].tags}
-          tutId={tut}
+          tutId={this.state.incompleteTutorials[tut].tutId}
+          status='incompleted'
           completed={this.state.incompleteTutorials[tut].completed}
         />
       )
@@ -52,8 +53,8 @@ export default class Tags extends Component {
           author={this.state.completeTutorials[tut].author}
           link={this.state.completeTutorials[tut].link}
           tags={this.state.completeTutorials[tut].tags}
-          tutId={tut}
-          completed={true}
+          tutId={this.state.completeTutorials[tut].tutId}
+          status='completed'
           completed={this.state.completeTutorials[tut].completed}
         />
       )

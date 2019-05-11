@@ -11,41 +11,59 @@ export default class Edit extends React.Component {
   }
 
   async componentDidMount() {
+
     database
-      .ref(
-        `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
-      )
-      .once('value')
-      .then(snap => this.setState({ tut: snap.val() }))
+              .ref(`/${auth.currentUser.uid}/tutorials/${this.props.match.params.status}`)
+              .orderByChild('tutId')
+              .equalTo(this.props.match.params.tutId)
+              .once('value')
+              .then(x =>  Object.keys(x.val()))
+              .then(index =>
+                database
+                  .ref(`/${auth.currentUser.uid}/tutorials/${this.props.match.params.status}/${index}`)
+                  .once('value')
+                  .then(snap => console.log('snap.val()', snap.val()) || this.setState({ tut: snap.val() }))
+                )
+
+
+              
 
     const suggestions = await database
       .ref(`/tags`)
       .once('value')
       .then(snap => snap.val())
+
     this.setState({ suggestions: Object.keys(suggestions) })
-    if (!this.state.tags) {
-      const tut = this.state.tut
-      tut.tags = []
-      this.setState({ tut })
-    }
+
+    // if (!this.state.tags) {
+    //   const tut = this.state.tut
+    //   tut.tags = []
+    //   this.setState({ tut })
+    // }
+
   }
 
-  handleChange = e => {
-    let target = e.target.name
-    let value = e.target.value
-    let obj = { ...this.state.tut }
-    obj[target] = value
-    this.setState({ tut: obj })
-  }
+  
 
   handleSubmit = e => {
     e.preventDefault()
+
     database
-      .ref(
-        `/${auth.currentUser.uid}/tutorials/${this.props.match.params.tutId}`
-      )
-      .update({ ...this.state.tut })
-    this.setState({ redirect: true })
+              .ref(`/${auth.currentUser.uid}/tutorials/${this.props.match.params.status}`)
+              .orderByChild('tutId')
+              .equalTo(this.props.match.params.tutId)
+              .once('value')
+              .then(x =>  Object.keys(x.val()))
+              .then(index =>
+                database
+              .ref(`/${auth.currentUser.uid}/tutorials/${this.props.match.params.status}/${index}`)
+              .update({ ...this.state.tut })
+              .then(() =>  this.setState({ redirect: true }))
+              )
+
+
+   
+   
   }
 
   handleChange = e => {
@@ -130,7 +148,7 @@ export default class Edit extends React.Component {
                 value={this.state.tut.description}
               /> */}
               <ReactTags
-                tags={this.state.tut.tags}
+                tags={this.state.tut.tags || []}
                 suggestions={this.state.suggestions}
                 handleDelete={this.handleDelete}
                 handleAddition={this.handleAddition}
