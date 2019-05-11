@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter,
-  Route,
-  Link,
-  Redirect,
-  withRouter,
-  Switch
-} from 'react-router-dom';
-import Login from './pages/Login/index';
-import Nav from './components/Nav.js';
-import Dashboard from './components/Dashboard.js';
-// import Home from './components/Home';
-import Edit from './components/Edit';
-import Add from './components/Add';
-import Tags from './components/Tags';
-import { auth } from './firebase.js';
+import { BrowserRouter, Link, Redirect, Route, Switch } from 'react-router-dom';
+import Add from './features/courseList/components/Add';
+import Edit from './features/courseList/components/Edit';
+import { auth, googleAuthProvider } from './firebase.js';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Tags from './pages/Tags';
 
 export default class App extends Component {
   state = {
@@ -78,7 +69,7 @@ export default class App extends Component {
             />
             <PrivateRoute
               authed={this.state.authed}
-              path="/edit/:tutId"
+              path="/edit/:tutId/:status"
               component={Edit}
             />
             <PrivateRoute
@@ -89,6 +80,14 @@ export default class App extends Component {
             />
             <Route render={() => <h3>No Match</h3>} />
           </Switch>
+          <footer className="pv4 ph3 ph5-m ph6-l mid-gray bt bw1 b--black-10">
+  <small className="f6 db tc">Version 0.0.2</small>
+  {/* <div class="tc mt3">
+    <a href="/language/" title="Language" class="f6 dib ph2 link mid-gray dim">Language</a>
+    <a href="/terms/"    title="Terms" class="f6 dib ph2 link mid-gray dim">Terms of Use</a>
+    <a href="/privacy/"  title="Privacy" class="f6 dib ph2 link mid-gray dim">Privacy</a>
+  </div> */}
+</footer>
         </div>
       </BrowserRouter>
     );
@@ -128,3 +127,52 @@ const PrivateRoute = ({ component, authed, ...rest }) => {
     />
   );
 };
+
+
+
+const Nav = ({ authed, location }) =>
+  <nav className="flex justify-between bb b--black-10">
+    <Link
+      to="/dashboard"
+      className="link white-70 hover-white no-underline flex items-center pa3 w-33"
+    >
+      <svg className="dib h1 w1" data-icon="grid" viewBox="0 0 32 32">
+        <title>Super Normal Icon Mark</title>
+        <path d="M2 2 L10 2 L10 10 L2 10z M12 2 L20 2 L20 10 L12 10z M22 2 L30 2 L30 10 L22 10z M2 12 L10 12 L10 20 L2 20z M12 12 L20 12 L20 20 L12 20z M22 12 L30 12 L30 20 L22 20z M2 22 L10 22 L10 30 L2 30z M12 22 L20 22 L20 30 L12 30z M22 22 L30 22 L30 30 L22 30z" />
+      </svg>
+    </Link>
+    <div className="tc w-33">
+      {location.pathname !== '/add' &&
+        <Link
+          to="/add"
+          className="f6 link dim br-pill ba ph3 pv2 dib bg-cucumber white ma3 center"
+        >
+          Add A Tutorial
+        </Link>}
+    </div>
+    <div className="flex-grow pa3 flex items-center w-33 justify-end">
+      {/* <Link to="/dashboard" className="f6 link dib dark-gray dim mr3 mr4-ns">
+        My Learning Path
+      </Link> */}
+      {authed
+        ? <button
+            className="f6 dib bg-black white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--black-20"
+            onClick={() => {
+              auth.signOut()
+            }}
+          >
+            Sign out
+          </button>
+        : <button
+            className="f6 dib bg-black white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--black-20"
+            onClick={() => auth.signInWithPopup(googleAuthProvider)}
+          >
+            Log in
+          </button>}
+    </div>
+  </nav>
+
+Nav.propTypes = {}
+Nav.defaultProps = {}
+
+
