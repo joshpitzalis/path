@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Link } from 'react-router-dom';
-import { Stats } from "../features/courseList/components/Stats";
+import Stats from "../features/courseList/components/Stats";
 import Tutorial from '../features/courseList/components/Tutorial';
 import { getItemStyle, getListStyle, reorder } from "../features/courseList/listHelpers";
 import { auth, database } from '../firebase.js';
@@ -61,6 +61,7 @@ export default class Dashboard extends Component {
         <Stats
           completed={ this.state.completed &&  this.state.completed.length}
           total={this.state.items && Object.keys(this.state.items).length}
+          uid={auth.currentUser.uid}
         />
         <div className="flex col wrap mw7 center">
           <DragDropContext onDragEnd={this.onDragEnd}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { auth, database } from '../../../firebase.js';
+import { auth, database } from '../../../firebase';
 
 const Tutorial = ({
   title,
@@ -10,8 +10,8 @@ const Tutorial = ({
   tutId,
   completed,
   tags,
-  status
-}) =>
+  status,
+}) => (
   <article
     className={`w-50 b--black-10 bw1 pt5 ${completed
       ? 'br tr mra ml2px done-dot'
@@ -19,8 +19,7 @@ const Tutorial = ({
   >
     <span
       className="clickCompleted"
-      onClick={() =>
-        database
+      onClick={() => database
         .ref(`/${auth.currentUser.uid}/tutorials/${tutId}`)
         .update({ completed: true })}
     />
@@ -34,43 +33,43 @@ const Tutorial = ({
 
     <div className="pa3">
       <h2 className="f5 fw4 gray mt0 truncate bg--orange">
-        by {author}
+          by
+        {' '}
+        {author}
       </h2>
       <p className="f6 f5-ns lh-copy measure">
-        {tags &&
-          tags.map(tag =>
-            <Link to={`/tags/${tag.text}`} key={tag.id} className="mr2 ttu">
-              {tag.text}
-            </Link>
-          )}
+        {tags
+            && tags.map(tag => (
+              <Link to={`/tags/${tag.text}`} key={tag.id} className="mr2 ttu">
+                {tag.text}
+              </Link>
+            ))}
       </p>
 
       <div className="fr">
         <button
-          onClick={() => 
-            database
-              .ref(`/${auth.currentUser.uid}/tutorials/${status}`)
-              .orderByChild('tutId')
-              .equalTo(tutId)
-              .once('value')
-              .then(x =>  Object.keys(x.val()))
-              .then(index =>
-                database
-              .ref(`/${auth.currentUser.uid}/tutorials/${status}/${index}`).remove()
-                )
-         }
+          onClick={() => database
+            .ref(`/${auth.currentUser.uid}/tutorials/${status}`)
+            .orderByChild('tutId')
+            .equalTo(tutId)
+            .once('value')
+            .then(x => Object.keys(x.val()))
+            .then(index => database
+              .ref(`/${auth.currentUser.uid}/tutorials/${status}/${index}`).remove())
+            }
           className="f6 link dim br-pill ph3 pv2 mb2 dib bn white bg-red pointer"
         >
-          Delete
+            Delete
         </button>
       </div>
 
       <div className="fl pr3">
         <Link to={`/edit/${tutId}/${status}`} className="black">
-          Edit
+            Edit
         </Link>
       </div>
     </div>
   </article>
+);
 
-export default Tutorial
+export default Tutorial;

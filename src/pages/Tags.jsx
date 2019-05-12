@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Stats } from "../features/courseList/components/Stats";
+import Stats from "../features/courseList/components/Stats";
 import Tutorial from '../features/courseList/components/Tutorial';
 import { auth, database } from '../firebase.js';
 
@@ -61,7 +61,9 @@ export default class Tags extends Component {
 
     return (
       <div>
-        <Stats completed={completedTutorials.length} total={tutorials.length} />
+        <Stats completed={completedTutorials.length} total={tutorials.length} 
+        uid={auth.currentUser.uid}
+        />
         <div className="flex col wrap mw7 center">
           {tutorials}
           {completedTutorials}

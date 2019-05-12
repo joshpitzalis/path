@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { WithContext as ReactTags } from 'react-tag-input';
-import { auth, database } from '../../../firebase';
+import { auth, database } from '../firebase';
 
-export default class Add extends Component {
+class Add extends Component {
   state = {
     tut: {
       title: null,
       author: null,
       desc: null,
       link: null,
+      price: null,
       uid: this.props.uid,
       completed: false,
       tags: []
@@ -73,6 +74,12 @@ export default class Add extends Component {
     this.setState({ tags: tags })
   }
 
+  handlePriceChange = (price) => {
+    const tut = { ...this.state.tut }
+    tut.price = price
+    this.setState({ tut })
+  }
+
   render() {
     if (this.state.redirect) {
       return <Redirect to={'/dashboard'} />
@@ -130,7 +137,8 @@ export default class Add extends Component {
             </div>
           </article>
 
-          <p>
+          <label htmlFor="price" className='db'>
+            <small>Course URL</small>
             <input
               className="pa2 mb2 input-reset ba bg-transparent w-100 "
               type="url"
@@ -139,10 +147,20 @@ export default class Add extends Component {
               onChange={this.handleChange}
               value={this.state.tut.link}
             />
-          </p>
-
+          </label>
+          <label htmlFor="price" className='db'>
+            <small>Price in $ USD </small>
+            <input type="number" id='price' value={this.state.tut.price}
+              onChange={e => this.handlePriceChange(e.target.value)}
+              placeholder="Free"
+              className="pa2 mb2 input-reset ba bg-transparent w-100"
+            />
+            
+          
+          
+          </label>
           <input
-            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 mb3"
+            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 mv3"
             type="submit"
             value="Submit"
           />
@@ -151,3 +169,8 @@ export default class Add extends Component {
     )
   }
 }
+
+
+export default Add
+
+

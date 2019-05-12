@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Link, Redirect, Route, Switch } from 'react-router-dom';
-import Add from './features/courseList/components/Add';
-import Edit from './features/courseList/components/Edit';
 import { auth, googleAuthProvider } from './firebase.js';
+import Add from './pages/Add';
 import Dashboard from './pages/Dashboard';
+import Edit from './pages/Edit';
 import Login from './pages/Login';
 import Tags from './pages/Tags';
 
@@ -81,7 +81,7 @@ export default class App extends Component {
             <Route render={() => <h3>No Match</h3>} />
           </Switch>
           <footer className="pv4 ph3 ph5-m ph6-l mid-gray bt bw1 b--black-10">
-  <small className="f6 db tc">Version 0.0.2</small>
+  <small className="f6 db tc">Version 0.0.3</small>
   {/* <div class="tc mt3">
     <a href="/language/" title="Language" class="f6 dib ph2 link mid-gray dim">Language</a>
     <a href="/terms/"    title="Terms" class="f6 dib ph2 link mid-gray dim">Terms of Use</a>
