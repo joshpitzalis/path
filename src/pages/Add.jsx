@@ -153,8 +153,12 @@ class Add extends Component {
             <input type="number" id='price' value={this.state.tut.price}
               onChange={e => this.handlePriceChange(e.target.value)}
               placeholder="Free"
-              className="pa2 mb2 input-reset ba bg-transparent w-100 "
-            /></label>
+              className="pa2 mb2 input-reset ba bg-transparent w-100"
+            />
+            
+          
+          
+          </label>
           <input
             className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 mv3"
             type="submit"
